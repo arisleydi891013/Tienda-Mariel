@@ -457,9 +457,26 @@ function verificarSesion() {
 // ==============================================
 // GESTIÓN DE PRODUCTOS
 // ==============================================
+let listaProductos = [];
+
 function obtenerProductos() {
-    return JSON.parse(localStorage.getItem('productos') || '[]');
+    return listaProductos;
 }
+function cargarProductosFirebase() {
+  const ref = collection(window.db, "productos");
+  onSnapshot(ref, snapshot => {
+    listaProductos = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    console.log('✅ Productos cargados');
+    if (document.getElementById('productos-publicos')) renderizarProductos('productos-publicos', true);
+    if (document.getElementById('lista-admin-productos')) renderizarProductos('lista-admin-productos');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', cargarProductosFirebase);
+
 
 async function guardarProductos(productos) {
   try {
@@ -583,7 +600,7 @@ function guardarProducto(e) {
     return false;
 }
 
-function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen) {
+async function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen) {
     const productos = obtenerProductos();
     const stock = parseInt(document.getElementById('producto-stock').value) || 0;
 
@@ -609,7 +626,8 @@ function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen) {
             stock: stock
         });
     }
-    guardarProductos(productos);
+    
+    await guardarProductos(productos);
     alert('✅ Producto guardado');
     
     // Limpiar el formulario después de guardar
@@ -628,6 +646,7 @@ function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen) {
         renderizarProductos('productos-tienda');
     }
 }
+
 
 function editarProducto(id) {
     const producto = obtenerProductos().find(p => p.id === id);
