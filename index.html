@@ -1155,6 +1155,23 @@ function mostrarPantalla(nombre) {
 // ==============================================
 verificarSesion();
 mostrarPantalla('inicio');
+  
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDuoY1nlNeFHMuXZokQEHCMTwEWoqkRd4I",
+    authDomain: "tienda-mariel.firebaseapp.com",
+    projectId: "tienda-mariel",
+    storageBucket: "tienda-mariel.firebasestorage.app",
+    messagingSenderId: "55345522096",
+    appId: "1:55345522096:web:d2f9988268551c9a6da275"
+  };
+  const app = initializeApp(firebaseConfig);
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+const db = getFirestore(app);
+window.db = db;
+
 </script>
 
 </body>
