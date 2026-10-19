@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Mariel — Tienda</title>
+   <!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDuoY1nlNeFHMuXZokQEHCMTwEWoqkRd4I",
+    authDomain: "tienda-mariel.firebaseapp.com",
+    projectId: "tienda-mariel",
+    storageBucket: "tienda-mariel.firebasestorage.app",
+    messagingSenderId: "55345522096",
+    appId: "1:55345522096:web:d2f9988268551c9a6da275"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  
+  window.db = db;
+  window.auth = auth;
+</script>
+
     <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
 body { line-height: 1.6; color: #1a1a2e; background: #f8f9fa; }
@@ -462,48 +485,38 @@ let listaProductos = [];
 function obtenerProductos() {
     return listaProductos;
 }
-function cargarProductosFirebase() {
-  const ref = collection(window.db, "productos");
-  onSnapshot(ref, snapshot => {
-    listaProductos = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    console.log('✅ Productos cargados');
-    if (document.getElementById('productos-publicos')) renderizarProductos('productos-publicos', true);
-    if (document.getElementById('lista-admin-productos')) renderizarProductos('lista-admin-productos');
-  });
+
+// Escuchar productos en tiempo real desde Firebase
+async function escucharProductos() {
+    const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    
+    onSnapshot(collection(window.db, "productos"), (snapshot) => {
+        listaProductos = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        
+        if (document.getElementById('productos-publicos')) renderizarProductos('productos-publicos', true);
+        if (document.getElementById('productos-tienda')) renderizarProductos('productos-tienda');
+        if (document.getElementById('lista-admin-productos')) renderizarProductos('lista-admin-productos');
+    });
 }
+let todosPedidos = [];
 
-document.addEventListener('DOMContentLoaded', cargarProductosFirebase);
-
-
-async function guardarProductos(productos) {
-  try {
-    const ref = collection(window.db, "productos");
+// Escuchar pedidos en tiempo real desde Firebase
+async function escucharPedidos() {
+    const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
     
-    // Borra lo que había antes
-    const snapshot = await getDocs(ref);
-    const borrar = snapshot.docs.map(doc => deleteDoc(doc(ref, doc.id)));
-    await Promise.all(borrar);
-    
-    // Guarda todo en Firebase
-    const agregar = productos.map(p => addDoc(ref, {
-      nombre: p.nombre,
-      descripcion: p.descripcion || '',
-      precio: parseFloat(p.precio),
-      stock: parseInt(p.stock) || 0,
-      imagen: p.imagen || ''
-    }));
-    
-    await Promise.all(agregar);
-    console.log('✅ Guardado en Firebase');
-  } catch (error) {
-    console.error('❌ Error:', error);
-  }
-  
-  // Sigue guardando en tu teléfono también
-  localStorage.setItem('productos', JSON.stringify(productos));
+    onSnapshot(collection(window.db, "pedidos"), (snapshot) => {
+        todosPedidos = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        
+        // Refrescar pantallas automáticamente
+        if (document.getElementById('lista-mis-pedidos')) renderizarMisPedidos();
+        if (document.getElementById('lista-admin-pedidos')) renderizarPedidosAdmin();
+    });
 }
 
 
@@ -599,38 +612,30 @@ function guardarProducto(e) {
     }
     return false;
 }
-
 async function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen) {
-    const productos = obtenerProductos();
     const stock = parseInt(document.getElementById('producto-stock').value) || 0;
+    
+    const producto = {
+        nombre,
+        descripcion,
+        precio: parseFloat(precio),
+        imagen,
+        stock: stock
+    };
 
+    const { collection, doc, setDoc, addDoc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    
     if (id) {
-        const indice = productos.findIndex(p => p.id === id);
-        if (indice !== -1) {
-            productos[indice] = { 
-                ...productos[indice], 
-                nombre, 
-                descripcion, 
-                precio, 
-                imagen,
-                stock: stock
-            };
-        }
+        // Editar producto existente
+        await setDoc(doc(window.db, "productos", id), producto, { merge: true });
     } else {
-        productos.push({
-            id: 'prod_' + Date.now(),
-            nombre, 
-            descripcion, 
-            precio, 
-            imagen,
-            stock: stock
-        });
+        // Agregar producto nuevo
+        await addDoc(collection(window.db, "productos"), producto);
     }
     
-    await guardarProductos(productos);
     alert('✅ Producto guardado');
     
-    // Limpiar el formulario después de guardar
+    // Limpiar formulario
     document.getElementById('producto-id-editar').value = '';
     document.getElementById('producto-nombre').value = '';
     document.getElementById('producto-descripcion').value = '';
@@ -638,13 +643,6 @@ async function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen)
     document.getElementById('producto-stock').value = '0';
     document.getElementById('producto-imagen').value = '';
     document.getElementById('titulo-form-producto').textContent = 'Agregar Producto';
-    
-    // Refrescar las listas
-    renderizarProductos('lista-admin-productos');
-    renderizarProductos('productos-publicos', true);
-    if (usuarioActual && !usuarioActual.esAdmin) {
-        renderizarProductos('productos-tienda');
-    }
 }
 
 
@@ -658,30 +656,29 @@ function editarProducto(id) {
     document.getElementById('titulo-form-producto').textContent = 'Editar Producto';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-function eliminarProducto(id) {
-    if (!confirm('¿Eliminar este producto?')) return;
-    const productos = obtenerProductos().filter(p => p.id !== id);
-    guardarProductos(productos);
-    alert('Producto eliminado');
-    renderizarProductos('lista-admin-productos');
-    renderizarProductos('productos-publicos', true);
-    if (usuarioActual && !usuarioActual.esAdmin) {
-        renderizarProductos('productos-tienda');
-    }
+async function eliminarProducto(id) {
+    if (!confirm('⚠️ ¿Eliminar este producto?')) return;
+    
+    const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    await deleteDoc(doc(window.db, "productos", id));
+    
+    alert('✅ Producto eliminado');
 }
+
+
   // Descuenta la cantidad comprada del stock cuando se valida el pago
-async function descontarStockDePedido(pedido) {
+function descontarStockDePedido(pedido) {
     const productos = obtenerProductos();
 
     pedido.productos.forEach(itemPedido => {
         const prod = productos.find(p => p.id === itemPedido.id);
         if (!prod) return;
 
+        // No dejar que el stock quede en números negativos
         prod.stock = Math.max(0, prod.stock - itemPedido.cantidad);
     });
 
-    await guardarProductos(productos);
+    guardarProductos(productos);
 }
 
 
@@ -916,13 +913,8 @@ async function confirmarPago(e) {
     if (carrito.length === 0) return alert('El carrito está vacío');
     if (!comprobanteBase64) return alert('Sube el comprobante de pago');
 
-    // ✅ Calcular subtotal de productos
     const subtotalProductos = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    
-    // ✅ Tomar el costo de envío que ya guardamos antes
     const costoEnvio = datosEnvio.costoEnvio || 0;
-    
-    // ✅ Total final = productos + envío
     const total = subtotalProductos + costoEnvio;
 
     const pedido = {
@@ -933,22 +925,21 @@ async function confirmarPago(e) {
         clienteCorreo: usuarioActual.correo,
         datosEnvio: { ...datosEnvio },
         productos: carrito.map(i => ({ ...i })),
-        subtotal: subtotalProductos, // ← Para verlo separado en el panel
-        costoEnvio: costoEnvio,       // ← Para verlo separado en el panel
-        total: total,                 // ← Total correcto final
+        subtotal: subtotalProductos,
+        costoEnvio: costoEnvio,
+        total: total,
         comprobante: comprobanteBase64,
         estado: 'pendiente_validacion'
     };
 
-    // 📤 Guardar el pedido en Firebase
-const pedidosRef = collection(window.db, "pedidos");
-await addDoc(pedidosRef, pedido);
+    // ✅ Guardar el pedido en Firebase
+    const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    await addDoc(collection(window.db, "pedidos"), pedido);
 
     // Reiniciar todo
     carrito = [];
     datosEnvio = {};
     comprobanteBase64 = '';
-    localStorage.removeItem('totalFinalPago'); // Limpiar el valor guardado
     document.getElementById('comprobante-pago').value = '';
     const vista = document.getElementById('vista-comprobante');
     if (vista) vista.innerHTML = '';
@@ -960,6 +951,7 @@ await addDoc(pedidosRef, pedido);
     mostrarPantalla('mis-pedidos');
     return false;
 }
+
 
 // ==============================================
 // ESTADOS DE PEDIDOS — Textos y colores
@@ -978,14 +970,12 @@ function obtenerInfoEstado(estado) {
 // ==============================================
 // CLIENTE — MIS PEDIDOS
 // ==============================================
-let todosPedidos = [];
 function renderizarMisPedidos() {
     const contenedor = document.getElementById('lista-mis-pedidos');
     if (!contenedor || !usuarioActual) return;
 
-    // ✅ Usamos los que vienen de Firebase en tiempo real
     const misPedidos = todosPedidos.filter(p => p.clienteId === usuarioActual.id);
-
+    
     if (misPedidos.length === 0) {
         contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">No tienes pedidos todavía.</p>';
         return;
@@ -993,7 +983,6 @@ function renderizarMisPedidos() {
 
     contenedor.innerHTML = '';
     misPedidos.forEach(pedido => {
-        // ✅ TODO LO DEMÁS SE QUEDA IGUAL — no cambias nada más
         const estado = obtenerInfoEstado(pedido.estado);
         const fecha = new Date(pedido.fecha).toLocaleDateString('es-UY', {
             day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -1025,13 +1014,13 @@ function renderizarMisPedidos() {
 // ==============================================
 // ADMINISTRADOR — GESTIÓN DE PEDIDOS
 // ==============================================
+let filtroPedidosAdmin = 'todos';
+
 function renderizarPedidosAdmin() {
     const contenedor = document.getElementById('lista-admin-pedidos');
     if (!contenedor || !usuarioActual?.esAdmin) return;
 
-    // ✅ Cambiamos esta sola línea
     let pedidos = todosPedidos;
-
     if (filtroPedidosAdmin !== 'todos') {
         pedidos = pedidos.filter(p => p.estado === filtroPedidosAdmin);
     }
@@ -1088,35 +1077,61 @@ function renderizarPedidosAdmin() {
         contenedor.appendChild(tarjeta);
     });
 }
-
-
 async function cambiarEstadoPedido(idPedido, nuevoEstado) {
     const indice = todosPedidos.findIndex(p => p.id === idPedido);
     if (indice === -1) return alert('Pedido no encontrado');
 
+    const estadoTexto = obtenerInfoEstado(nuevoEstado).texto;
+    if (!confirm(`¿Cambiar estado a: ${estadoTexto}?`)) return;
+
+    const { doc, updateDoc, getDocs, collection, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    
+    // Si validamos el pago, descontamos el stock automáticamente
     if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
-        await descontarStockDePedido(todosPedidos[indice]);
+        const pedido = todosPedidos[indice];
+        for (const item of pedido.productos) {
+            const productosRef = collection(window.db, "productos");
+            const q = query(productosRef, where("nombre", "==", item.nombre));
+            const snapshot = await getDocs(q);
+            if (!snapshot.empty) {
+                const docProd = snapshot.docs[0];
+                const datos = docProd.data();
+                await updateDoc(docProd.ref, {
+                    stock: Math.max(0, (datos.stock || 0) - item.cantidad)
+                });
+            }
+        }
+    }
+
+    // Actualizar el estado del pedido en Firebase
+    await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
+    alert('✅ Estado actualizado');
+}
+
+
+function cambiarEstadoPedido(idPedido, nuevoEstado) {
+    const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    const indice = pedidos.findIndex(p => p.id === idPedido);
+    if (indice === -1) return alert('Pedido no encontrado');
+
+    // ✅ Cuando se valida el pago → se descuenta el stock
+    if (nuevoEstado === 'pago_validado' && pedidos[indice].estado !== 'pago_validado') {
+        descontarStockDePedido(pedidos[indice]);
     }
 
     const estadoTexto = obtenerInfoEstado(nuevoEstado).texto;
     if (!confirm(`¿Cambiar estado a: ${estadoTexto}?`)) return;
 
-    async function actualizarEstado() {
-      try {
-        const pedidoRef = doc(window.db, "pedidos", todosPedidos[indice].id);
-        await updateDoc(pedidoRef, { estado: nuevoEstado });
-        alert('✅ Estado actualizado');
-      } catch (error) {
-        console.error(error);
-        alert('❌ Error al actualizar');
-      }
-    }
-    await actualizarEstado();
+    pedidos[indice].estado = nuevoEstado;
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    alert('✅ Estado actualizado y stock descontado');
     
+    // Refrescar todo para ver los nuevos números
     renderizarPedidosAdmin();
     renderizarProductos('lista-admin-productos');
     renderizarProductos('productos-publicos', true);
 }
+
 
 function filtrarPedidosAdmin(estado) {
     filtroPedidosAdmin = estado;
@@ -1202,83 +1217,15 @@ function mostrarPantalla(nombre) {
     }
 }
 
-// 📥 Cargar pedidos desde Firebase en tiempo real
-function cargarPedidosFirebase() {
-  const pedidosRef = collection(window.db, "pedidos");
-  onSnapshot(pedidosRef, snapshot => {
-    todosPedidos = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    // Si estamos en "Mis Pedidos", los mostramos
-    const contenedor = document.getElementById('lista-mis-pedidos');
-    if (contenedor && usuarioActual) renderizarMisPedidos();
-  });
-}
-
-// ▶️ Iniciar cuando la página cargue
-document.addEventListener('DOMContentLoaded', cargarPedidosFirebase);
 
 // ==============================================
 // INICIO DE LA APLICACIÓN
 // ==============================================
+escucharProductos();  // ← agrega esta línea
+escucharPedidos();  // ← agrega esta línea 
 verificarSesion();
 mostrarPantalla('inicio');
-  
 </script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-  import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDuoY1nlNeFHMuXZokQEHCMTwEWoqkRd4I",
-    authDomain: "tienda-mariel.firebaseapp.com",
-    projectId: "tienda-mariel",
-    storageBucket: "tienda-mariel.firebasestorage.app",
-    messagingSenderId: "55345522096",
-    appId: "1:55345522096:web:d2f9988268551c9a6da275"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  
-  window.db = db;
-  window.collection = collection;
-  window.onSnapshot = onSnapshot;
-  window.addDoc = addDoc;
-  window.updateDoc = updateDoc;
-  window.deleteDoc = deleteDoc;
-  window.doc = doc;
-  window.doc = doc;
-  window.getDocs = getDocs;
-
-
-// ✅ PEGA AQUÍ EL CÓDIGO DEL PUENTE
-window.db.collection = function(nombre) {
-  const ref = collection(window.db, nombre);
-  return {
-    add: function(datos) { return addDoc(ref, datos); },
-    doc: function(id) {
-      return {
-        update: function(datos) { return updateDoc(doc(ref, id), datos); },
-        delete: function() { return deleteDoc(doc(ref, id)); }
-      };
-    },
-    onSnapshot: function(callback) {
-      return onSnapshot(ref, snapshot => {
-        callback({
-          docs: snapshot.docs.map(d => ({
-            id: d.id,
-            data: () => d.data()
-          }))
-        });
-      });
-    }
-  };
-};
-
-</script>
-
 
 </body>
 </html>
