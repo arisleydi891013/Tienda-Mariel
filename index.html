@@ -471,12 +471,38 @@ function cerrarSesion() {
 }
 
 function verificarSesion() {
-    const sesion = localStorage.getItem('sesion');
-    if (sesion) {
-        usuarioActual = JSON.parse(sesion);
-        actualizarMenu();
+    // Primero leemos del localStorage inmediatamente
+    const sesionLocal = localStorage.getItem('sesion');
+    if (sesionLocal) {
+        usuarioActual = JSON.parse(sesionLocal);
+    } else {
+        usuarioActual = null;
     }
+    // Mostramos el menú y la pantalla de inicio de una vez
+    actualizarMenu();
+    mostrarPantalla('inicio');
+    
+    // Después escuchamos Firebase sin esperar
+    import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js").then(({ onAuthStateChanged }) => {
+        onAuthStateChanged(window.auth, (usuario) => {
+            if (usuario) {
+                usuarioActual = {
+                    id: usuario.uid,
+                    correo: usuario.email,
+                    nombre: usuario.displayName || usuario.email,
+                    esAdmin: usuario.email === "admin@teammariel.com"
+                };
+            } else if (sesionLocal) {
+                usuarioActual = JSON.parse(sesionLocal);
+            } else {
+                usuarioActual = null;
+            }
+            actualizarMenu();
+        });
+    });
 }
+
+
 // ==============================================
 // GESTIÓN DE PRODUCTOS
 // ==============================================
@@ -1014,8 +1040,7 @@ function renderizarMisPedidos() {
 // ==============================================
 // ADMINISTRADOR — GESTIÓN DE PEDIDOS
 // ==============================================
-let filtroPedidosAdmin = 'todos';
-
+  
 function renderizarPedidosAdmin() {
     const contenedor = document.getElementById('lista-admin-pedidos');
     if (!contenedor || !usuarioActual?.esAdmin) return;
@@ -1106,30 +1131,6 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
     // Actualizar el estado del pedido en Firebase
     await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
     alert('✅ Estado actualizado');
-}
-
-
-function cambiarEstadoPedido(idPedido, nuevoEstado) {
-    const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
-    const indice = pedidos.findIndex(p => p.id === idPedido);
-    if (indice === -1) return alert('Pedido no encontrado');
-
-    // ✅ Cuando se valida el pago → se descuenta el stock
-    if (nuevoEstado === 'pago_validado' && pedidos[indice].estado !== 'pago_validado') {
-        descontarStockDePedido(pedidos[indice]);
-    }
-
-    const estadoTexto = obtenerInfoEstado(nuevoEstado).texto;
-    if (!confirm(`¿Cambiar estado a: ${estadoTexto}?`)) return;
-
-    pedidos[indice].estado = nuevoEstado;
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    alert('✅ Estado actualizado y stock descontado');
-    
-    // Refrescar todo para ver los nuevos números
-    renderizarPedidosAdmin();
-    renderizarProductos('lista-admin-productos');
-    renderizarProductos('productos-publicos', true);
 }
 
 
@@ -1224,7 +1225,7 @@ function mostrarPantalla(nombre) {
 escucharProductos();  // ← agrega esta línea
 escucharPedidos();  // ← agrega esta línea 
 verificarSesion();
-mostrarPantalla('inicio');
+
 </script>
 
 </body>
