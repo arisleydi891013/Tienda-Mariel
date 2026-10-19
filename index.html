@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Mariel — Tienda</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+body { line-height: 1.6; color: #1a1a2e; background: #f8f9fa; }
+
+/* Colores Team Mariel — azul y dorado */
+:root {
+    --azul: #0f3460;
+    --dorado: #d4af37;
+    --blanco: #ffffff;
+    --gris-claro: #e9ecef;
+    --exito: #28a745;
+    --alerta: #ffc107;
+    --peligro: #dc3545;
+}
+
+/* Cabecera */
+header { background: linear-gradient(135deg, var(--azul), #16213e); color: white; padding: 1rem 1.5rem; }
+.logo { text-align: center; padding: 1rem 0; }
+.logo h1 { font-size: 2rem; color: var(--dorado); text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+.logo p { font-style: italic; opacity: 0.9; }
+nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+nav button {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+nav button:hover, nav button.activo { background: var(--dorado); color: var(--azul); font-weight: 600; }
+
+main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+.oculto { display: none !important; }
+
+/* Tarjetas de productos */
+.productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+.producto {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+.producto:hover { transform: translateY(-3px); }
+.producto img { width: 100%; height: 180px; object-fit: cover; background: var(--gris-claro); }
+.producto-info { padding: 1rem; }
+.producto h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--azul); }
+.producto .precio { font-size: 1.25rem; font-weight: 700; color: var(--dorado); margin: 0.5rem 0; }
+.producto button {
+    width: 100%;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.btn-ver { background: var(--gris-claro); color: var(--azul); cursor: default; }
+.btn-agregar { background: var(--azul); color: white; }
+.btn-agregar:hover { opacity: 0.9; }
+
+/* Formularios */
+.tarjeta {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 480px;
+    margin: 0 auto;
+}
+.tarjeta h2 { text-align: center; color: var(--azul); margin-bottom: 1.5rem; }
+.grupo { margin-bottom: 1rem; }
+label { display: block; margin-bottom: 0.4rem; font-weight: 500; }
+input, textarea, select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+button.boton {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 0.5rem;
+}
+.boton.dorado { background: var(--dorado); color: var(--azul); }
+.boton.azul { background: var(--azul); color: white; }
+.boton:hover { opacity: 0.9; }
+.enlace { text-align: center; margin-top: 1rem; font-size: 0.95rem; }
+.enlace span { color: var(--azul); cursor: pointer; text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    main { padding: 1rem; }
+    .tarjeta { padding: 1.5rem; }
+    .productos { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <h1>Team Mariel</h1>
+        <p>Tienda — Online</p>
+      <img src="https://i.postimg.cc/MMmXX38v/Screenshot-20260912-021817.jpg" alt="Team Mariel" style="max-width:90%; width:600px; max-height:350px; border-radius:8px; display:block; margin:0.5rem auto;">
+
+
+    </div>
+    <nav id="menu-navegacion">
+        <!-- Menú cambia según sesión -->
+    </nav>
+</header>
+
+<main id="contenedor-principal">
+    <!-- Aquí se cargan las pantallas -->
+</main>
+<!-- PANTALLA INICIO (PÚBLICA) -->
+<div id="pantalla-inicio" class="pantalla oculto">
+    <div class="bienvenida" style="text-align:center; padding:2rem 1rem;">
+        <h2 style="color:#0f3460; font-size:1.8rem; margin-bottom:1rem;">Bienvenidos a Team Mariel</h2>
+        <p style="font-size:1.1rem; max-width:600px; margin:0 auto 2rem;">Productos que llegan a tu familia, con la confianza de siempre.</p>
+    </div>
+    <h3 style="text-align:center; margin:1.5rem 0 1rem; color:#0f3460;">Nuestros Productos</h3>
+    <div id="productos-publicos" class="productos"></div>
+    <div style="text-align:center; margin-top:2.5rem;">
+        <p style="font-size:1.05rem; margin-bottom:1rem;">Para comprar, inicia sesión o regístrate:</p>
+        <button onclick="mostrarPantalla('login')" class="boton dorado" style="width:auto; padding:0.7rem 2rem; margin:0 0.5rem;">Iniciar Sesión</button>
+        <button onclick="mostrarPantalla('registro')" class="boton azul" style="width:auto; padding:0.7rem 2rem; margin:0 0.5rem;">Registrarse</button>
+    </div>
+</div>
+
+<!-- PANTALLA REGISTRO -->
+<div id="pantalla-registro" class="pantalla oculto">
+    <div class="tarjeta">
+        <h2>Crear Cuenta</h2>
+      
+        <form onsubmit="return registrarUsuario(event)">
+            <div class="grupo">
+                <label>Nombre Completo:</label>
+                <input type="text" id="reg-nombre" required>
+            </div>
+            <div class="grupo">
+                <label>Correo Electrónico:</label>
+                <input type="email" id="reg-correo" required>
+            </div>
+            <div class="grupo">
+                <label>Contraseña:</label>
+                <input type="password" id="reg-clave" required minlength="6">
+            </div>
+            <button type="submit" class="boton dorado">Registrarse</button>
+        </form>
+        <div class="enlace">
+            ¿Ya tienes cuenta? <span onclick="mostrarPantalla('login')">Inicia sesión</span>
+        </div>
+    </div>
+</div>
+
+<!-- PANTALLA LOGIN -->
+<div id="pantalla-login" class="pantalla oculto">
+    <div class="tarjeta">
+        <h2>Iniciar Sesión</h2>
+        <form onsubmit="return iniciarSesion(event)">
+            <div class="grupo">
+                <label>Correo Electrónico:</label>
+                <input type="email" id="login-correo" required>
+            </div>
+            <div class="grupo">
+                <label>Contraseña:</label>
+                <input type="password" id="login-clave" required>
+            </div>
+            <button type="submit" class="boton dorado">Entrar</button>
+        </form>
+        <div class="enlace">
+            ¿No tienes cuenta? <span onclick="mostrarPantalla('registro')">Regístrate</span>
+        </div>
+        <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #ddd; text-align:center; font-size:0.9rem; color:#666;">
+            <p>🔐 Administrador: <span onclick="document.getElementById('login-correo').value='admin@teammariel.com'; document.getElementById('login-clave').value='admin123';">acceso rápido</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- PANTALLA TIENDA (CLIENTE AUTENTICADO) -->
+<div id="pantalla-tienda" class="pantalla oculto">
+    <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">Tienda — Agrega al Carrito</h2>
+    <div id="productos-tienda" class="productos"></div>
+</div>
+
+<!-- PANTALLA CARRITO -->
+<div id="pantalla-carrito" class="pantalla oculto">
+    <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">Tu Carrito 🛒</h2>
+    <div id="lista-carrito"></div>
+    <div style="text-align:right; font-size:1.3rem; margin:1.5rem 0; padding-right:1rem;">
+        <strong>Total: $<span id="total-carrito">0.00</span> UYU</strong>
+    </div>
+    <div style="text-align:center; margin-top:2rem;">
+        <button onclick="mostrarPantalla('tienda')" class="boton azul" style="width:auto; margin-right:1rem;">Seguir Comprando</button>
+      <button onclick="mostrarPantalla('datos-envio'); actualizarTotalConEnvio();" class="boton dorado" style="width:auto;">Siguiente → Datos de Envío</button>
+
+    </div>
+</div>
+
+<!-- PANTALLA DATOS DE ENVÍO -->
+<div id="pantalla-datos-envio" class="pantalla oculto">
+    <div class="tarjeta" style="max-width:550px;">
+        <h2>Datos de Entrega</h2>
+        <form onsubmit="return guardarDatosEnvio(event)">
+            <div class="grupo">
+                <label>Dirección de Entrega:</label>
+                <textarea id="envio-direccion" rows="3" required placeholder="Calle, número, apartamento, referencias"></textarea>
+            </div>
+            <div class="grupo">
+                <label>Teléfono / Celular:</label>
+                <input type="tel" id="envio-telefono" required placeholder="+598 99 123 456">
+            </div>
+            <div class="grupo">
+                <label>Número de Carné / Identificación:</label>
+                <input type="text" id="envio-carnet" required placeholder="Tu número de documento">
+            </div>
+          <div style="background:#f0f8f0; padding:1rem; border-radius:8px; margin:1.5rem 0;">
+    <h4 style="margin-bottom:0.8rem; color:#2e7d32; font-size:1rem;">📦 Forma de Entrega</h4>
+    
+    <label style="display:block; margin-bottom:0.6rem; cursor:pointer; font-size:0.95rem;">
+        <input type="radio" name="entrega" value="retiro" checked onchange="actualizarTotalConEnvio()">
+        🏪 Retirar en Tienda — <strong>Gratis</strong>
+    </label>
+    
+    <label style="display:block; cursor:pointer; font-size:0.95rem;">
+        <input type="radio" name="entrega" value="domicilio" onchange="actualizarTotalConEnvio()">
+        🚚 Envío a Domicilio — <strong>$<span id="precio-envio-muestra">0</span> UYU</strong>
+    </label>
+</div>
+
+<div style="margin-top:1rem; padding-top:1rem; border-top:2px solid #ddd; font-size:1.05rem;">
+    <p>Subtotal productos: $<span id="subtotal-productos">0.00</span> UYU</p>
+    <p id="linea-envio" style="display:none;">Envío a domicilio: $<span id="mostrar-envio">0.00</span> UYU</p>
+    <p style="font-size:1.2rem; font-weight:bold; color:#d4af37; margin-top:0.5rem;">
+        Total a pagar: $<span id="total-final">0.00</span> UYU
+    </p>
+</div>
+
+            <div style="text-align:center; margin-top:1.5rem;">
+                <button type="button" onclick="mostrarPantalla('carrito')" class="boton azul" style="width:auto; margin-right:1rem;">← Volver al Carrito</button>
+                <button type="submit" class="boton dorado">Ir al Pago →</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- PANTALLA PAGO -->
+<div id="pantalla-pago" class="pantalla oculto">
+    <div class="tarjeta" style="max-width:550px;">
+        <h2>💳 Datos para el Pago</h2>
+        <div style="background:#f5f5f5; padding:1.2rem; border-radius:8px; margin:1rem 0; line-height:1.8;">
+    <h3 style="margin:0 0 1rem 0; color:#2e7d32;">🏦 Datos para transferir</h3>
+
+    <!-- Opción 1 -->
+    <div style="background:#fff; padding:1rem; border-radius:6px; margin-bottom:0.8rem; border:1px solid #ddd;">
+        <p><strong>Banco:</strong> Banco de la República Oriental del Uruguay</p>
+        <p><strong>Nombre:</strong> Team Mariel</p>
+        <p><strong>Nº de Cuenta:</strong> 001-234567-8</p>
+    </div>
+
+    <!-- Opción 2 -->
+    <div style="background:#fff; padding:1rem; border-radius:6px; margin-bottom:0.8rem; border:1px solid #ddd;">
+        <p><strong>Banco:</strong> [Nombre del Banco]</p>
+        <p><strong>Nombre:</strong> Team Mariel</p>
+        <p><strong>Nº de Cuenta:</strong> [Tu número]</p>
+    </div>
+
+    <!-- Opción 3 -->
+    <div style="background:#fff; padding:1rem; border-radius:6px; border:1px solid #ddd;">
+        <p><strong>Banco:</strong> [Nombre del Banco]</p>
+        <p><strong>Nombre:</strong> Team Mariel</p>
+        <p><strong>Nº de Cuenta:</strong> [Tu número]</p>
+    </div>
+
+    <hr style="margin:1rem 0; border:none; border-top:1px solid #ccc;">
+    <p style="font-size:1.1rem; color:#d4af37;"><strong>Total a pagar: $<span id="total-pago">0.00</span> UYU</strong></p>
+    <p style="font-size:0.9rem; color:#d32f2f; margin-top:0.8rem;">⚠️ Solo para transferencias. No compartir códigos ni contraseñas.</p>
+</div>
+
+        <form onsubmit="return confirmarPago(event)">
+            <div class="grupo">
+                <label>Subir comprobante de transferencia (imagen):</label>
+                <input type="file" id="comprobante-pago" accept="image/*" required>
+                <div id="vista-comprobante" style="margin-top:0.5rem; text-align:center;"></div>
+            </div>
+            <div style="text-align:center; margin-top:1.5rem;">
+                <button type="button" onclick="mostrarPantalla('datos-envio')" class="boton azul" style="width:auto; margin-right:1rem;">← Volver</button>
+                <button type="submit" class="boton dorado">✅ Confirmar Pedido</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- PANTALLA MIS PEDIDOS (CLIENTE) -->
+<div id="pantalla-mis-pedidos" class="pantalla oculto">
+    <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">Mis Pedidos 📋</h2>
+    <div id="lista-mis-pedidos"></div>
+</div>
+
+<!-- PANTALLA ADMIN — GESTIÓN DE PRODUCTOS -->
+<div id="pantalla-admin-productos" class="pantalla oculto">
+    <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">⚙️ Administrar Productos</h2>
+    <div class="tarjeta" style="max-width:550px; margin-bottom:2rem;">
+        <h3 id="titulo-form-producto">Agregar Producto</h3>
+        <form onsubmit="return guardarProducto(event)">
+            <input type="hidden" id="producto-id-editar">
+            <div class="grupo">
+                <label>Nombre del Producto:</label>
+                <input type="text" id="producto-nombre" required>
+            </div>
+            <div class="grupo">
+                <label>Descripción:</label>
+                <textarea id="producto-descripcion" rows="2"></textarea>
+            </div>
+            <div class="grupo">
+                <label>Precio (UYU):</label>
+                <input type="number" id="producto-precio" min="1" step="0.01" required>
+            </div>
+          
+          <div class="grupo">
+           <label>Stock Disponible (cantidad):</label>
+           <input type="number" id="producto-stock" min="0" value="0" required>
+           </div>
+            
+            <div class="grupo">
+                <label>Imagen del Producto:</label>
+                <input type="file" id="producto-imagen" accept="image/*">
+            </div>
+            <div style="text-align:center;">
+                <button type="submit" class="boton dorado">Guardar Producto</button>
+            </div>
+        </form>
+    </div>
+    <h3 style="margin-bottom:1rem;">Lista de Productos</h3>
+    <div id="lista-admin-productos" class="productos"></div>
+</div>
+
+<!-- PANTALLA ADMIN — PEDIDOS RECIBIDOS -->
+<div id="pantalla-admin-pedidos" class="pantalla oculto">
+    <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">📦 Pedidos Recibidos</h2>
+    <div style="text-align:center; margin-bottom:1.5rem;">
+        <button onclick="filtrarPedidosAdmin('todos')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Todos</button>
+        <button onclick="filtrarPedidosAdmin('pendiente_validacion')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Pendientes</button>
+        <button onclick="filtrarPedidosAdmin('pago_validado')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Pago Validado</button>
+        <button onclick="filtrarPedidosAdmin('en_proceso_entrega')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">En Entrega</button>
+        <button onclick="filtrarPedidosAdmin('entregado')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Entregados</button>
+        <button onclick="filtrarPedidosAdmin('rechazado')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Rechazados</button>
+    </div>
+    <div id="lista-admin-pedidos"></div>
+</div>
+
+<script>
+// ==============================================
+// CONFIGURACIÓN DE LA APLICACIÓN
+// ==============================================
+const ADMIN_CORREO = 'admin@teammariel.com';
+const ADMIN_CLAVE = 'admin123';
+let usuarioActual = null;
+let carrito = [];
+let datosEnvio = {};
+let comprobanteBase64 = '';
+let filtroPedidosAdmin = 'todos';
+
+// ==============================================
+// GESTIÓN DE USUARIOS Y SESIÓN
+// ==============================================
+function obtenerUsuarios() {
+    return JSON.parse(localStorage.getItem('usuarios') || '[]');
+}
+
+function guardarUsuarios(usuarios) {
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+}
+
+function registrarUsuario(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('reg-nombre').value.trim();
+    const correo = document.getElementById('reg-correo').value.trim().toLowerCase();
+    const clave = document.getElementById('reg-clave').value;
+
+    if (!correo.includes('@')) return alert('Ingresa un correo válido');
+    if (clave.length < 6) return alert('La contraseña debe tener al menos 6 caracteres');
+
+    const usuarios = obtenerUsuarios();
+    if (usuarios.some(u => u.correo === correo)) return alert('Este correo ya está registrado');
+
+    const nuevoUsuario = { id: 'user_' + Date.now(), nombre, correo, clave, esAdmin: false };
+    usuarios.push(nuevoUsuario);
+    guardarUsuarios(usuarios);
+    alert('✅ Cuenta creada correctamente. Ahora inicia sesión.');
+    mostrarPantalla('login');
+    return false;
+}
+
+function iniciarSesion(e) {
+    e.preventDefault();
+    const correo = document.getElementById('login-correo').value.trim().toLowerCase();
+    const clave = document.getElementById('login-clave').value;
+
+    // Administrador
+    if (correo === ADMIN_CORREO && clave === ADMIN_CLAVE) {
+        usuarioActual = { id: 'admin', nombre: 'Administrador', correo: ADMIN_CORREO, esAdmin: true };
+        localStorage.setItem('sesion', JSON.stringify(usuarioActual));
+        alert('✅ Bienvenido, Administrador');
+        actualizarMenu();
+        mostrarPantalla('admin-productos');
+        return false;
+    }
+
+    // Cliente registrado
+    const usuarios = obtenerUsuarios();
+    const usuario = usuarios.find(u => u.correo === correo && u.clave === clave);
+    if (!usuario) return alert('Correo o contraseña incorrectos');
+
+    usuarioActual = usuario;
+    localStorage.setItem('sesion', JSON.stringify(usuarioActual));
+    alert(`✅ Bienvenido, ${usuario.nombre}`);
+    actualizarMenu();
+    mostrarPantalla('tienda');
+    return false;
+}
+
+function cerrarSesion() {
+    usuarioActual = null;
+    carrito = [];
+    datosEnvio = {};
+    comprobanteBase64 = '';
+    localStorage.removeItem('sesion');
+    actualizarMenu();
+    mostrarPantalla('inicio');
+}
+
+function verificarSesion() {
+    const sesion = localStorage.getItem('sesion');
+    if (sesion) {
+        usuarioActual = JSON.parse(sesion);
+        actualizarMenu();
+    }
+}
+// ==============================================
+// GESTIÓN DE PRODUCTOS
+// ==============================================
+function obtenerProductos() {
+    return JSON.parse(localStorage.getItem('productos') || '[]');
+}
+
+function guardarProductos(productos) {
+    localStorage.setItem('productos', JSON.stringify(productos));
+}
+
+function renderizarProductos(contenedorId, soloVer = false) {
+    const productos = obtenerProductos();
+    const contenedor = document.getElementById(contenedorId);
+    if (!contenedor) return;
+    
+    contenedor.innerHTML = '';
+    
+    if (productos.length === 0) {
+        contenedor.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#666; padding:2rem;">No hay productos disponibles todavía.</p>';
+        return;
+    }
+
+    productos.forEach(producto => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'producto';
+        tarjeta.innerHTML = `
+            <img src="${producto.imagen || 'https://via.placeholder.com/300x200?text=Producto'}" alt="${producto.nombre}">
+            <div class="producto-info">
+                <h3>${producto.nombre}</h3>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:0.5rem;">${producto.descripcion || ''}</p>
+                <p class="precio">$${parseFloat(producto.precio).toFixed(2)} UYU</p>
+                <!-- ✅ Stock visible -->
+                <p style="font-size:0.85rem; margin:0.3rem 0; color:${producto.stock > 0 ? '#28a745' : '#dc3545'};">
+                    ${producto.stock > 0 ? `Disponibles: ${producto.stock}` : 'Agotado'}
+                </p>
+                ${soloVer 
+                    ? '<button class="btn-ver" disabled>Ver producto</button>' 
+                    : `<button class="btn-agregar" onclick="agregarAlCarrito('${producto.id}')" ${producto.stock <= 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>🛒 Agregar al Carrito</button>`
+                }
+                <!-- ✅ Botones de Editar y Eliminar — SOLO para administrador -->
+                ${!soloVer && usuarioActual?.esAdmin ? `
+                    <div style="margin-top:0.8rem; display:flex; gap:0.5rem;">
+                        <button onclick="editarProducto('${producto.id}')" style="padding:0.4rem 0.8rem; background:#ffc107; color:#000; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem;">✏️ Editar</button>
+                        <button onclick="eliminarProducto('${producto.id}')" style="padding:0.4rem 0.8rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; font-size:0.9rem;">🗑️ Eliminar</button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+        contenedor.appendChild(tarjeta);
+    });
+}
+function editarProducto(id) {
+    const productos = obtenerProductos();
+    const producto = productos.find(p => p.id === id);
+    if (!producto) return alert('Producto no encontrado');
+
+    document.getElementById('producto-id-editar').value = producto.id;
+    document.getElementById('producto-nombre').value = producto.nombre;
+    document.getElementById('producto-descripcion').value = producto.descripcion || '';
+    document.getElementById('producto-precio').value = producto.precio;
+    document.getElementById('producto-stock').value = producto.stock;
+    document.getElementById('titulo-form-producto').textContent = 'Editar Producto';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function eliminarProducto(id) {
+    if (!confirm('⚠️ ¿Seguro que quieres eliminar este producto? No se puede deshacer.')) return;
+
+    let productos = obtenerProductos();
+    productos = productos.filter(p => p.id !== id);
+    guardarProductos(productos);
+
+    alert('✅ Producto eliminado');
+    renderizarProductos('lista-admin-productos');
+    renderizarProductos('productos-publicos', true);
+}
+
+function guardarProducto(e) {
+    e.preventDefault();
+    const idEditar = document.getElementById('producto-id-editar').value;
+    const nombre = document.getElementById('producto-nombre').value.trim();
+    const descripcion = document.getElementById('producto-descripcion').value.trim();
+    const precio = parseFloat(document.getElementById('producto-precio').value);
+    const inputImagen = document.getElementById('producto-imagen');
+
+    if (!nombre || isNaN(precio) || precio <= 0) return alert('Completa nombre y precio válido');
+
+    const productos = obtenerProductos();
+
+    if (inputImagen.files.length > 0) {
+        const lector = new FileReader();
+        lector.onload = function(e) {
+            procesarGuardadoProducto(idEditar, nombre, descripcion, precio, e.target.result);
+        };
+        lector.readAsDataURL(inputImagen.files[0]);
+    } else {
+        const prodExistente = idEditar ? productos.find(p => p.id === idEditar) : null;
+        const imagen = prodExistente ? prodExistente.imagen : '';
+        procesarGuardadoProducto(idEditar, nombre, descripcion, precio, imagen);
+    }
+    return false;
+}
+
+function procesarGuardadoProducto(id, nombre, descripcion, precio, imagen) {
+    const productos = obtenerProductos();
+    const stock = parseInt(document.getElementById('producto-stock').value) || 0;
+
+    if (id) {
+        const indice = productos.findIndex(p => p.id === id);
+        if (indice !== -1) {
+            productos[indice] = { 
+                ...productos[indice], 
+                nombre, 
+                descripcion, 
+                precio, 
+                imagen,
+                stock: stock
+            };
+        }
+    } else {
+        productos.push({
+            id: 'prod_' + Date.now(),
+            nombre, 
+            descripcion, 
+            precio, 
+            imagen,
+            stock: stock
+        });
+    }
+    guardarProductos(productos);
+    alert('✅ Producto guardado');
+    
+    // Limpiar el formulario después de guardar
+    document.getElementById('producto-id-editar').value = '';
+    document.getElementById('producto-nombre').value = '';
+    document.getElementById('producto-descripcion').value = '';
+    document.getElementById('producto-precio').value = '';
+    document.getElementById('producto-stock').value = '0';
+    document.getElementById('producto-imagen').value = '';
+    document.getElementById('titulo-form-producto').textContent = 'Agregar Producto';
+    
+    // Refrescar las listas
+    renderizarProductos('lista-admin-productos');
+    renderizarProductos('productos-publicos', true);
+    if (usuarioActual && !usuarioActual.esAdmin) {
+        renderizarProductos('productos-tienda');
+    }
+}
+
+function editarProducto(id) {
+    const producto = obtenerProductos().find(p => p.id === id);
+    if (!producto) return;
+    document.getElementById('producto-id-editar').value = id;
+    document.getElementById('producto-nombre').value = producto.nombre;
+    document.getElementById('producto-descripcion').value = producto.descripcion || '';
+    document.getElementById('producto-precio').value = producto.precio;
+    document.getElementById('titulo-form-producto').textContent = 'Editar Producto';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function eliminarProducto(id) {
+    if (!confirm('¿Eliminar este producto?')) return;
+    const productos = obtenerProductos().filter(p => p.id !== id);
+    guardarProductos(productos);
+    alert('Producto eliminado');
+    renderizarProductos('lista-admin-productos');
+    renderizarProductos('productos-publicos', true);
+    if (usuarioActual && !usuarioActual.esAdmin) {
+        renderizarProductos('productos-tienda');
+    }
+}
+  // Descuenta la cantidad comprada del stock cuando se valida el pago
+function descontarStockDePedido(pedido) {
+    const productos = obtenerProductos();
+
+    pedido.productos.forEach(itemPedido => {
+        const prod = productos.find(p => p.id === itemPedido.id);
+        if (!prod) return;
+
+        // No dejar que el stock quede en números negativos
+        prod.stock = Math.max(0, prod.stock - itemPedido.cantidad);
+    });
+
+    guardarProductos(productos);
+}
+
+
+// ==============================================
+// CARRITO DE COMPRAS
+// ==============================================
+function agregarAlCarrito(idProducto) {
+    const productos = obtenerProductos();
+    const producto = productos.find(p => p.id === idProducto);
+    if (!producto) return alert('Producto no encontrado');
+
+    // No dejar agregar si está agotado
+    if (producto.stock <= 0) {
+        return alert('⚠️ Este producto está agotado por ahora');
+    }
+
+    const existe = carrito.find(item => item.id === idProducto);
+    const cantidadEnCarrito = existe ? existe.cantidad : 0;
+    const cantidadTotal = cantidadEnCarrito + 1;
+
+    // No dejar agregar más de lo que hay disponible
+    if (cantidadTotal > producto.stock) {
+        return alert(`⚠️ Solo quedan ${producto.stock} unidades de "${producto.nombre}"`);
+    }
+
+    if (existe) {
+        existe.cantidad++;
+    } else {
+        carrito.push({
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            cantidad: 1
+        });
+    }
+
+    actualizarMenu();
+    alert(`✅ "${producto.nombre}" agregado al carrito`);
+}
+
+function renderizarCarrito() {
+    const contenedor = document.getElementById('lista-carrito');
+    const totalElement = document.getElementById('total-carrito');
+    const subtotalElement = document.getElementById('subtotal-productos');
+    const envioElement = document.getElementById('costo-envio');
+    const totalPagoElement = document.getElementById('total-pago');
+    
+    if (!contenedor || !totalElement) return;
+
+    if (carrito.length === 0) {
+        contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">Tu carrito está vacío. Ve a la tienda y agrega productos.</p>';
+        totalElement.textContent = '0.00';
+        // Resetea todo si no hay productos
+        if (subtotalElement) subtotalElement.textContent = '0.00';
+        if (envioElement) envioElement.textContent = '0.00';
+        if (totalPagoElement) totalPagoElement = '0.00';
+        return;
+    }
+
+    // 1. Suma solo los productos
+    let subtotalProductos = 0;
+    contenedor.innerHTML = '';
+    carrito.forEach((item, indice) => {
+        const subtotal = item.precio * item.cantidad;
+        subtotalProductos += subtotal;
+        const fila = document.createElement('div');
+        fila.style = 'display:flex; justify-content:space-between; align-items:center; padding:0.8rem; border-bottom:1px solid #eee; flex-wrap:wrap; gap:0.5rem;';
+        fila.innerHTML = `
+            <div><strong>${item.nombre}</strong><br>$${item.precio.toFixed(2)} c/u</div>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <button onclick="cambiarCantidadCarrito(${indice}, -1)" style="width:30px; height:30px; border:none; background:#ddd; border-radius:4px; cursor:pointer;">−</button>
+                <span>${item.cantidad}</span>
+                <button onclick="cambiarCantidadCarrito(${indice}, 1)" style="width:30px; height:30px; border:none; background:#ddd; border-radius:4px; cursor:pointer;">+</button>
+                <button onclick="quitarDelCarrito(${indice})" style="border:none; background:transparent; color:#d00; cursor:pointer; font-size:1.2rem; margin-left:0.5rem;">🗑️</button>
+            </div>
+            <div style="font-weight:bold;">$${subtotal.toFixed(2)}</div>
+        `;
+        contenedor.appendChild(fila);
+    });
+
+    // 2. Obtiene el costo de envío (puede venir de la selección del usuario)
+    // Si ya hay una variable global con el envío, úsala; si no, lee del formulario
+    let costoEnvio = 0;
+    const opcionEnvio = document.querySelector('input[name="envio"]:checked');
+    if (opcionEnvio) {
+        costoEnvio = parseFloat(opcionEnvio.value) || 0;
+    }
+
+    // 3. Calcula el total final
+    const totalFinal = subtotalProductos + costoEnvio;
+
+    // 4. Actualiza TODOS los números en pantalla
+    totalElement.textContent = subtotalProductos.toFixed(2); // subtotal solo productos
+    if (subtotalElement) subtotalElement.textContent = subtotalProductos.toFixed(2);
+    if (envioElement) envioElement.textContent = costoEnvio.toFixed(2);
+    if (totalPagoElement) totalPagoElement.textContent = totalFinal.toFixed(2);
+}
+
+
+function cambiarCantidadCarrito(indice, cambio) {
+     carrito[indice].cantidad += cambio;
+     if (carrito[indice].cantidad <= 0) {
+         carrito.splice(indice, 1);
+     }
+     renderizarCarrito();
+     actualizarMenu(); // ✅ Actualiza el contador arriba
+  }
+
+function quitarDelCarrito(indice) {
+     carrito.splice(indice, 1);
+     renderizarCarrito();
+     actualizarMenu(); // ✅ Actualiza el contador arriba
+}
+  // 👇 Aquí pones el precio del envío a domicilio
+const PRECIO_ENVIO_DOMICILIO = 80; // Cambia el 0 por el valor, ej: 150
+
+function actualizarTotalConEnvio() {
+    const radioEntrega = document.querySelector('input[name="entrega"]:checked');
+    if (!radioEntrega) return;
+
+    // Calcular subtotal solo de productos
+    const subtotal = carrito.reduce((s, item) => s + (item.precio * item.cantidad), 0);
+    
+    // Determinar costo de envío
+    const esDomicilio = radioEntrega.value === 'domicilio';
+    const montoEnvio = esDomicilio ? PRECIO_ENVIO_DOMICILIO : 0;
+    const total = subtotal + montoEnvio;
+
+    // Actualizar los números en pantalla
+    const muestraPrecio = document.getElementById('precio-envio-muestra');
+    const subtotalElem = document.getElementById('subtotal-productos');
+    const lineaEnvio = document.getElementById('linea-envio');
+    const mostrarEnvio = document.getElementById('mostrar-envio');
+    const totalFinal = document.getElementById('total-final');
+
+    if (muestraPrecio) muestraPrecio.textContent = PRECIO_ENVIO_DOMICILIO.toFixed(2);
+    if (subtotalElem) subtotalElem.textContent = subtotal.toFixed(2);
+    if (lineaEnvio) lineaEnvio.style.display = esDomicilio ? 'block' : 'none';
+    if (mostrarEnvio) mostrarEnvio.textContent = montoEnvio.toFixed(2);
+    if (totalFinal) totalFinal.textContent = total.toFixed(2);
+  localStorage.setItem('ultimoTotal', total.toString());
+}
+
+
+// ==============================================
+// DATOS DE ENVÍO
+// ==============================================
+
+function guardarDatosEnvio(e) {
+    e.preventDefault();
+
+    const opcionEntrega = document.querySelector('input[name="entrega"]:checked');
+    if (!opcionEntrega) return alert('Elige cómo quieres recibir tu pedido');
+
+    // ✅ Calcular aquí mismo, sin depender de otra función
+    const subtotal = carrito.reduce((s, item) => s + (item.precio * item.cantidad), 0);
+    const costoEnvio = opcionEntrega.value === 'domicilio' ? PRECIO_ENVIO_DOMICILIO : 0;
+    const totalFinal = subtotal + costoEnvio;
+
+    // ✅ Guardar para que la pantalla de pago lo vea
+    localStorage.setItem('totalPagoCompleto', totalFinal.toString());
+
+    datosEnvio = {
+        direccion: document.getElementById('envio-direccion').value.trim(),
+        telefono: document.getElementById('envio-telefono').value.trim(),
+        carnet: document.getElementById('envio-carnet').value.trim(),
+        formaEntrega: opcionEntrega.value,
+        costoEnvio: costoEnvio
+    };
+
+    if (!datosEnvio.direccion || !datosEnvio.telefono || !datosEnvio.carnet) {
+        return alert('Completa todos los datos');
+    }
+
+    mostrarPantalla('pago');
+    return false;
+}
+// Cuando se muestra la pantalla de pago, pone el total correcto
+function mostrarTotalEnPago() {
+    const totalGuardado = localStorage.getItem('totalPagoCompleto');
+    const elementoTotal = document.getElementById('total-pago');
+    
+    if (totalGuardado && elementoTotal) {
+        elementoTotal.textContent = parseFloat(totalGuardado).toFixed(2);
+    }
+}
+
+// Llama a esta función cuando se abre la pantalla de pago
+// Si usas una función mostrarPantalla, agrégala ahí:
+// function mostrarPantalla(nombre) {
+//     ... tu código ...
+//     if (nombre === 'pago') mostrarTotalEnPago();
+// }
+// Subir comprobante de pago
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'comprobante-pago') {
+        const archivo = e.target.files[0];
+        
+        if (!archivo) {
+            comprobanteBase64 = "";
+            const vista = document.getElementById('vista-comprobante');
+            if (vista) vista.innerHTML = '';
+            return;
+        }
+        
+        if (!archivo.type.startsWith('image/')) {
+            alert('Sube una imagen como comprobante');
+            e.target.value = '';
+            comprobanteBase64 = "";
+            const vista = document.getElementById('vista-comprobante');
+            if (vista) vista.innerHTML = '';
+            return;
+        }
+
+        const lector = new FileReader();
+        lector.onload = function(e) {
+            comprobanteBase64 = e.target.result;
+            const vista = document.getElementById('vista-comprobante');
+            if (vista) {
+                vista.innerHTML = `
+                    <p style="color:green; font-weight:bold;">✅ Comprobante cargado:</p>
+                    <img src="${comprobanteBase64}" style="max-width:200px; border-radius:6px; margin-top:0.5rem; display:block;">
+                `;
+            }
+        };
+        lector.readAsDataURL(archivo);
+    }
+});
+
+function confirmarPago(e) {
+    e.preventDefault();
+    if (carrito.length === 0) return alert('El carrito está vacío');
+    if (!comprobanteBase64) return alert('Sube el comprobante de pago');
+
+    // ✅ Calcular subtotal de productos
+    const subtotalProductos = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    
+    // ✅ Tomar el costo de envío que ya guardamos antes
+    const costoEnvio = datosEnvio.costoEnvio || 0;
+    
+    // ✅ Total final = productos + envío
+    const total = subtotalProductos + costoEnvio;
+
+    const pedido = {
+        id: 'ped_' + Date.now(),
+        fecha: new Date().toISOString(),
+        clienteId: usuarioActual.id,
+        clienteNombre: usuarioActual.nombre,
+        clienteCorreo: usuarioActual.correo,
+        datosEnvio: { ...datosEnvio },
+        productos: carrito.map(i => ({ ...i })),
+        subtotal: subtotalProductos, // ← Para verlo separado en el panel
+        costoEnvio: costoEnvio,       // ← Para verlo separado en el panel
+        total: total,                 // ← Total correcto final
+        comprobante: comprobanteBase64,
+        estado: 'pendiente_validacion'
+    };
+
+    const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    pedidos.unshift(pedido);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+    // Reiniciar todo
+    carrito = [];
+    datosEnvio = {};
+    comprobanteBase64 = '';
+    localStorage.removeItem('totalFinalPago'); // Limpiar el valor guardado
+    document.getElementById('comprobante-pago').value = '';
+    const vista = document.getElementById('vista-comprobante');
+    if (vista) vista.innerHTML = '';
+    document.getElementById('envio-direccion').value = '';
+    document.getElementById('envio-telefono').value = '';
+    document.getElementById('envio-carnet').value = '';
+
+    alert('✅ Pedido confirmado. Gracias por tu compra. Revisaremos tu pago pronto.');
+    mostrarPantalla('mis-pedidos');
+    return false;
+}
+
+// ==============================================
+// ESTADOS DE PEDIDOS — Textos y colores
+// ==============================================
+function obtenerInfoEstado(estado) {
+    const estados = {
+        'pendiente_validacion': { texto: '⏳ Pendiente de validación', color: '#ffc107' },
+        'pago_validado': { texto: '✅ Pago validado — En preparación', color: '#28a745' },
+        'en_proceso_entrega': { texto: '🚚 En camino / En entrega', color: '#007bff' },
+        'entregado': { texto: '📦 ✅ Entregado — Proceso completado', color: '#28a745' },
+        'rechazado': { texto: '❌ Rechazado / Cancelado', color: '#dc3545' }
+    };
+    return estados[estado] || { texto: estado, color: '#666' };
+}
+
+// ==============================================
+// CLIENTE — MIS PEDIDOS
+// ==============================================
+function renderizarMisPedidos() {
+    const contenedor = document.getElementById('lista-mis-pedidos');
+    if (!contenedor || !usuarioActual) return;
+
+    const todosPedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    const misPedidos = todosPedidos.filter(p => p.clienteId === usuarioActual.id);
+
+    if (misPedidos.length === 0) {
+        contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">No tienes pedidos todavía.</p>';
+        return;
+    }
+
+    contenedor.innerHTML = '';
+    misPedidos.forEach(pedido => {
+        const estado = obtenerInfoEstado(pedido.estado);
+        const fecha = new Date(pedido.fecha).toLocaleDateString('es-UY', {
+            day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        const tarjeta = document.createElement('div');
+        tarjeta.style = 'background:white; border-radius:10px; padding:1.2rem; margin-bottom:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.08);';
+        tarjeta.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.8rem;">
+                <h3 style="color:#0f3460; font-size:1rem;">Pedido: ${pedido.id}</h3>
+                <span style="background:${estado.color}; color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.85rem; font-weight:500;">${estado.texto}</span>
+            </div>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:0.8rem;">📅 ${fecha}</p>
+            <p style="font-size:0.95rem;"><strong>Dirección:</strong> ${pedido.datosEnvio?.direccion || '—'}</p>
+            <p style="font-size:0.95rem;"><strong>Teléfono:</strong> ${pedido.datosEnvio?.telefono || '—'}</p>
+            <p style="font-size:0.95rem; margin-bottom:0.8rem;"><strong>Documento:</strong> ${pedido.datosEnvio?.carnet || '—'}</p>
+            <div style="border-top:1px solid #eee; padding-top:0.8rem; margin-top:0.5rem;">
+                <p style="font-weight:600; margin-bottom:0.5rem;">Productos:</p>
+                ${pedido.productos.map(i => `<p style="font-size:0.9rem;">• ${i.cantidad}x ${i.nombre} — $${(i.precio * i.cantidad).toFixed(2)}</p>`).join('')}
+                <p style="font-size:1.1rem; font-weight:700; color:#d4af37; margin-top:0.5rem;">Total: $${pedido.total.toFixed(2)} UYU</p>
+            </div>
+            ${pedido.comprobante ? `<div style="margin-top:0.8rem;"><p style="font-size:0.9rem; font-weight:500;">Comprobante de pago:</p><img src="${pedido.comprobante}" style="max-width:150px; border-radius:6px; margin-top:0.3rem;"></div>` : ''}
+        `;
+        contenedor.appendChild(tarjeta);
+    });
+}
+
+// ==============================================
+// ADMINISTRADOR — GESTIÓN DE PEDIDOS
+// ==============================================
+function renderizarPedidosAdmin() {
+    const contenedor = document.getElementById('lista-admin-pedidos');
+    if (!contenedor || !usuarioActual?.esAdmin) return;
+
+    let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    if (filtroPedidosAdmin !== 'todos') {
+        pedidos = pedidos.filter(p => p.estado === filtroPedidosAdmin);
+    }
+
+    if (pedidos.length === 0) {
+        contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">No hay pedidos en esta categoría.</p>';
+        return;
+    }
+
+    contenedor.innerHTML = '';
+    pedidos.forEach(pedido => {
+        const estado = obtenerInfoEstado(pedido.estado);
+        const fecha = new Date(pedido.fecha).toLocaleDateString('es-UY', {
+            day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        const tarjeta = document.createElement('div');
+        tarjeta.style = 'background:white; border-radius:10px; padding:1.2rem; margin-bottom:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.08);';
+        tarjeta.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.8rem;">
+                <h3 style="color:#0f3460; font-size:1rem;">Pedido: ${pedido.id}</h3>
+                <span style="background:${estado.color}; color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.85rem; font-weight:500;">${estado.texto}</span>
+            </div>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:0.8rem;">📅 ${fecha}</p>
+            <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:0.8rem;">
+                <div>
+                    <p style="font-size:0.95rem;"><strong>Cliente:</strong> ${pedido.clienteNombre}</p>
+                    <p style="font-size:0.95rem;"><strong>Correo:</strong> ${pedido.clienteCorreo}</p>
+                </div>
+                <div>
+                    <p style="font-size:0.95rem;"><strong>Dirección:</strong> ${pedido.datosEnvio?.direccion || '—'}</p>
+                    <p style="font-size:0.95rem;"><strong>Teléfono:</strong> ${pedido.datosEnvio?.telefono || '—'}</p>
+                    <p style="font-size:0.95rem;"><strong>Documento:</strong> ${pedido.datosEnvio?.carnet || '—'}</p>
+                </div>
+            </div>
+            <div style="border-top:1px solid #eee; padding-top:0.8rem; margin-top:0.5rem;">
+                <p style="font-weight:600; margin-bottom:0.5rem;">Productos:</p>
+                ${pedido.productos.map(i => `<p style="font-size:0.9rem;">• ${i.cantidad}x ${i.nombre} — $${(i.precio * i.cantidad).toFixed(2)}</p>`).join('')}
+                <p style="font-size:1.1rem; font-weight:700; color:#d4af37; margin-top:0.5rem;">Total: $${pedido.total.toFixed(2)} UYU</p>
+            </div>
+            ${pedido.comprobante ? `<div style="margin-top:0.8rem;"><p style="font-size:0.9rem; font-weight:500;">Comprobante de pago:</p><img src="${pedido.comprobante}" style="max-width:180px; border-radius:6px; margin-top:0.3rem;"></div>` : ''}
+            ${pedido.estado !== 'entregado' && pedido.estado !== 'rechazado' ? `
+                <div style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid #eee;">
+                    <p style="font-weight:500; margin-bottom:0.5rem;">Cambiar estado:</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+                        ${pedido.estado === 'pendiente_validacion' ? `<button onclick="cambiarEstadoPedido('${pedido.id}', 'pago_validado')" style="padding:0.4rem 0.8rem; border:none; border-radius:4px; background:#28a745; color:white; cursor:pointer;">✅ Validar Pago</button>` : ''}
+                        ${pedido.estado === 'pago_validado' ? `<button onclick="cambiarEstadoPedido('${pedido.id}', 'en_proceso_entrega')" style="padding:0.4rem 0.8rem; border:none; border-radius:4px; background:#007bff; color:white; cursor:pointer;">🚚 Enviar a Entrega</button>` : ''}
+                        ${pedido.estado === 'en_proceso_entrega' ? `<button onclick="cambiarEstadoPedido('${pedido.id}', 'entregado')" style="padding:0.4rem 0.8rem; border:none; border-radius:4px; background:#28a745; color:white; cursor:pointer;">📦 Marcar Entregado</button>` : ''}
+                        ${pedido.estado !== 'entregado' ? `<button onclick="cambiarEstadoPedido('${pedido.id}', 'rechazado')" style="padding:0.4rem 0.8rem; border:none; border-radius:4px; background:#dc3545; color:white; cursor:pointer;">❌ Rechazar</button>` : ''}
+                    </div>
+                </div>
+            ` : ''}
+        `;
+        contenedor.appendChild(tarjeta);
+    });
+}
+
+function cambiarEstadoPedido(idPedido, nuevoEstado) {
+    const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+    const indice = pedidos.findIndex(p => p.id === idPedido);
+    if (indice === -1) return alert('Pedido no encontrado');
+
+    // ✅ Cuando se valida el pago → se descuenta el stock
+    if (nuevoEstado === 'pago_validado' && pedidos[indice].estado !== 'pago_validado') {
+        descontarStockDePedido(pedidos[indice]);
+    }
+
+    const estadoTexto = obtenerInfoEstado(nuevoEstado).texto;
+    if (!confirm(`¿Cambiar estado a: ${estadoTexto}?`)) return;
+
+    pedidos[indice].estado = nuevoEstado;
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    alert('✅ Estado actualizado y stock descontado');
+    
+    // Refrescar todo para ver los nuevos números
+    renderizarPedidosAdmin();
+    renderizarProductos('lista-admin-productos');
+    renderizarProductos('productos-publicos', true);
+}
+
+
+function filtrarPedidosAdmin(estado) {
+    filtroPedidosAdmin = estado;
+    renderizarPedidosAdmin();
+}
+
+// ==============================================
+// NAVEGACIÓN Y CONTROL DE PANTALLAS
+// ==============================================
+function actualizarMenu() {
+    const menu = document.getElementById('menu-navegacion');
+    if (!menu) return;
+
+    if (!usuarioActual) {
+        menu.innerHTML = `
+            <button onclick="mostrarPantalla('inicio')">🏪 Inicio</button>
+            <button onclick="mostrarPantalla('login')">🔐 Iniciar Sesión</button>
+            <button onclick="mostrarPantalla('registro')">📝 Registrarse</button>
+        `;
+    } else if (usuarioActual.esAdmin) {
+        menu.innerHTML = `
+            <button onclick="mostrarPantalla('admin-productos')" id="nav-admin-productos">⚙️ Productos</button>
+            <button onclick="mostrarPantalla('admin-pedidos')" id="nav-admin-pedidos">📦 Pedidos</button>
+            <button onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+        `;
+    } else {
+        menu.innerHTML = `
+            <button onclick="mostrarPantalla('tienda')" id="nav-tienda">🏪 Tienda</button>
+            <button onclick="mostrarPantalla('carrito')" id="nav-carrito">🛒 Carrito (${carrito.reduce((s,i)=>s+i.cantidad,0)})</button>
+            <button onclick="mostrarPantalla('mis-pedidos')" id="nav-mis-pedidos">📋 Mis Pedidos</button>
+            <button onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+        `;
+    }
+}
+
+function ocultarTodasPantallas() {
+    document.querySelectorAll('.pantalla').forEach(p => p.classList.add('oculto'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('activo'));
+}
+
+function mostrarPantalla(nombre) {
+    ocultarTodasPantallas();
+    const pantalla = document.getElementById(`pantalla-${nombre}`);
+    if (!pantalla) return console.warn('Pantalla no encontrada:', nombre);
+
+    pantalla.classList.remove('oculto');
+    actualizarMenu();
+
+    // Cargar contenido según pantalla
+    switch(nombre) {
+        case 'inicio':
+            renderizarProductos('productos-publicos', true);
+            break;
+        case 'tienda':
+            if (!usuarioActual) return mostrarPantalla('login');
+            renderizarProductos('productos-tienda');
+            break;
+        case 'carrito':
+            if (!usuarioActual) return mostrarPantalla('login');
+            renderizarCarrito();
+            break;
+        case 'pago':
+            // ✅ Al entrar a pago, calcula y muestra el total con envío
+            const subtotal = carrito.reduce((s, item) => s + (item.precio * item.cantidad), 0);
+            const costoEnvio = datosEnvio?.costoEnvio || 0;
+            const total = subtotal + costoEnvio;
+            const elementoTotal = document.getElementById('total-pago');
+            if (elementoTotal) elementoTotal.textContent = total.toFixed(2);
+            break;
+        case 'mis-pedidos':
+            if (!usuarioActual) return mostrarPantalla('login');
+            renderizarMisPedidos();
+            break;
+        case 'admin-productos':
+            if (!usuarioActual?.esAdmin) return mostrarPantalla('inicio');
+            renderizarProductos('lista-admin-productos');
+            break;
+        case 'admin-pedidos':
+            if (!usuarioActual?.esAdmin) return mostrarPantalla('inicio');
+            filtroPedidosAdmin = 'todos';
+            renderizarPedidosAdmin();
+            break;
+    }
+}
+
+
+// ==============================================
+// INICIO DE LA APLICACIÓN
+// ==============================================
+verificarSesion();
+mostrarPantalla('inicio');
+</script>
+
+</body>
+</html>
