@@ -1104,38 +1104,52 @@ function renderizarPedidosAdmin() {
 }
 async function cambiarEstadoPedido(idPedido, nuevoEstado) {
     const indice = todosPedidos.findIndex(p => p.id === idPedido);
-    if (indice === -1) return alert('Pedido no encontrado');
+    if (indice === -1) {
+        console.log("❌ Pedido no encontrado");
+        return alert('Pedido no encontrado');
+    }
 
     const estadoTexto = obtenerInfoEstado(nuevoEstado).texto;
     if (!confirm(`¿Cambiar estado a: ${estadoTexto}?`)) return;
 
     const { doc, updateDoc, getDocs, collection, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
     
-    // Si validamos el pago → descontamos el stock
-    if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
-        const pedido = todosPedidos[indice];
-        for (const item of pedido.productos) {
-            const productosRef = collection(window.db, "productos");
-            const q = query(productosRef, where("nombre", "==", item.nombre));
-            const snapshot = await getDocs(q);
-            if (!snapshot.empty) {
-                const docProd = snapshot.docs[0];
-                const datos = docProd.data();
-                await updateDoc(docProd.ref, {
-                    stock: Math.max(0, (datos.stock || 0) - item.cantidad)
-                });
+    try {
+        // Si validamos el pago → descontamos el stock
+        if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
+            const pedido = todosPedidos[indice];
+            for (const item of pedido.productos) {
+                const productosRef = collection(window.db, "productos");
+                const q = query(productosRef, where("nombre", "==", item.nombre));
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    const docProd = snapshot.docs[0];
+                    const datos = docProd.data();
+                    await updateDoc(docProd.ref, {
+                        stock: Math.max(0, (datos.stock || 0) - item.cantidad)
+                    });
+                }
             }
         }
-    }
 
-    // Actualizar el estado en Firebase
-    await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
-    
-    // ✅ Refrescar la pantalla del administrador AHORA MISMO
-    renderizarPedidosAdmin();
-    
-    alert('✅ Estado actualizado');
+        // Actualizar el estado en Firebase
+        await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
+        
+        // ✅ Actualizar la lista local también
+        todosPedidos[indice].estado = nuevoEstado;
+        
+        // ✅ Refrescar pantalla
+        renderizarPedidosAdmin();
+        
+        console.log("✅ Estado cambiado a:", nuevoEstado);
+        alert('✅ Estado actualizado');
+        
+    } catch (error) {
+        console.log("❌ Error:", error);
+        alert('Hubo un error: ' + error.message);
+    }
 }
+
 
 function filtrarPedidosAdmin(estado) {
     filtroPedidosAdmin = estado;
