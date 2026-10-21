@@ -726,8 +726,6 @@ async function escucharPedidos() {
     const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
     
     onSnapshot(collection(window.db, "pedidos"), (snapshot) => {
-        // ✅ Si no hay cambios reales en Firebase, no actualizar con datos viejos
-        if (snapshot.metadata.hasPendingWrites) return;
         
         todosPedidos = snapshot.docs.map(doc => ({
             id: doc.id,
@@ -1301,9 +1299,8 @@ function renderizarPedidosAdmin() {
 }
 
 async function cambiarEstadoPedido(idPedido, nuevoEstado) {
-    const indice = todosPedidos.findIndex(p => p.id === idPedido);
-    if (indice === -1) {
-        console.log("❌ Pedido no encontrado");
+    const pedido = todosPedidos.find(p => p.id === idPedido);
+    if (!pedido) {
         return alert('Pedido no encontrado');
     }
 
@@ -1313,11 +1310,8 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
     const { doc, updateDoc, getDocs, collection, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
     
     try {
-        if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
-            const pedido = todosPedidos[indice];
-            const productos = pedido.productos || []; // ✅ Protección
-            
-            for (const item of productos) {
+        if (nuevoEstado === 'pago_validado' && pedido.estado !== 'pago_validado') {
+            for (const item of pedido.productos || []) {
                 const productosRef = collection(window.db, "productos");
                 const q = query(productosRef, where("nombre", "==", item.nombre));
                 const snapshot = await getDocs(q);
@@ -1332,18 +1326,20 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
         }
 
         await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
-        
-        mostrarPantalla('admin-pedidos');
+
+        // Actualizar en la lista local
+        const indice = todosPedidos.findIndex(p => p.id === idPedido);
+        if (indice !== -1) {
+            todosPedidos[indice].estado = nuevoEstado;
+        }
+
         alert('✅ Estado actualizado');
-        
-        console.log("✅ Estado cambiado a:", nuevoEstado);
+        renderizarPedidosAdmin();
         
     } catch (error) {
-        console.log("❌ Error:", error);
-        alert('Hubo un error: ' + error.message);
+        alert('❌ Error: ' + error.message);
     }
 }
-
 
 function filtrarPedidosAdmin(estado) {
     filtroPedidosAdmin = estado;
