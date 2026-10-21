@@ -64,7 +64,12 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 .oculto { display: none !important; }
 
 /* Tarjetas de productos */
-.productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+.productos { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
 .producto {
     background: white;
     border-radius: 12px;
@@ -72,11 +77,33 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     transition: transform 0.2s;
 }
-.producto:hover { transform: translateY(-3px); }
-.producto img { width: 100%; height: 180px; object-fit: cover; background: var(--gris-claro); }
-.producto-info { padding: 1rem; }
-.producto h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--azul); }
-.producto .precio { font-size: 1.25rem; font-weight: 700; color: var(--dorado); margin: 0.5rem 0; }
+
+.producto:hover { 
+    transform: translateY(-3px);
+}
+
+.producto img { 
+    width: 100%; 
+    height: 130px;
+    object-fit: cover;
+}
+
+.producto-info { 
+    padding: 0.8rem;
+}
+
+.producto h3 { 
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+}
+
+.producto .precio { 
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dorado);
+    margin: 0.3rem 0;
+}
+
 .producto button {
     width: 100%;
     padding: 0.7rem;
@@ -84,11 +111,28 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s;
+    background: var(--azul);
+    color: white;
+    transition: background 0.2s;
 }
-.btn-ver { background: var(--gris-claro); color: var(--azul); cursor: default; }
-.btn-agregar { background: var(--azul); color: white; }
-.btn-agregar:hover { opacity: 0.9; }
+
+.producto button:hover {
+    background: #1a4a7a;
+}
+
+.btn-ver { 
+    background: var(--gris-claro);
+    color: var(--azul);
+}
+
+.btn-agregar { 
+    background: var(--azul);
+    color: white;
+}
+
+.btn-agregar:hover { 
+    opacity: 0.9;
+}
 
 /* Formularios */
 .tarjeta {
@@ -132,6 +176,125 @@ button.boton {
     .tarjeta { padding: 1.5rem; }
     .productos { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }
+      /* =====================================
+   CARRUSEL DE INFORMACIÓN
+   ===================================== */
+
+.carrusel-ofertas {
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--azul), #16213e);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    height: 75px;
+}
+
+.carrusel-texto {
+    display: flex;
+    animation: deslizarInfo 10s infinite;
+    width: 300%;
+}
+
+.carrusel-texto > div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dorado);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+@keyframes deslizarInfo {
+    0% { transform: translateX(0); }
+    30% { transform: translateX(0); }
+    33% { transform: translateX(-33.33%); }
+    63% { transform: translateX(-33.33%); }
+    66% { transform: translateX(-66.66%); }
+    96% { transform: translateX(-66.66%); }
+    100% { transform: translateX(0); }
+}
+/* =====================================
+   CARRUSEL DE FONDO EN BIENVENIDA
+   ===================================== */
+
+.bienvenida {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--azul), #16213e);
+    margin: 1rem;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carrusel-fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.carrusel-foto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: cambiarFoto 20s infinite ease-in-out;
+}
+
+/* Cada foto aparece cada 2 segundos — 10 fotos = ciclo de 20s */
+.carrusel-foto:nth-child(1)  { animation-delay:  0s; }
+.carrusel-foto:nth-child(2)  { animation-delay:  2s; }
+.carrusel-foto:nth-child(3)  { animation-delay:  4s; }
+.carrusel-foto:nth-child(4)  { animation-delay:  6s; }
+.carrusel-foto:nth-child(5)  { animation-delay:  8s; }
+.carrusel-foto:nth-child(6)  { animation-delay: 10s; }
+.carrusel-foto:nth-child(7)  { animation-delay: 12s; }
+.carrusel-foto:nth-child(8)  { animation-delay: 14s; }
+.carrusel-foto:nth-child(9)  { animation-delay: 16s; }
+.carrusel-foto:nth-child(10) { animation-delay: 18s; }
+
+@keyframes cambiarFoto {
+    0%   { opacity: 0; }
+    10%  { opacity: 1; }
+    40%  { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.bienvenida-texto {
+    position: relative;
+    z-index: 2;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.bienvenida-texto h2 {
+    color: var(--dorado);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.bienvenida-texto p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    color: white;
+}
+
+
     </style>
 </head>
 <body>
@@ -154,11 +317,33 @@ button.boton {
 </main>
 <!-- PANTALLA INICIO (PÚBLICA) -->
 <div id="pantalla-inicio" class="pantalla oculto">
-    <div class="bienvenida" style="text-align:center; padding:2rem 1rem;">
-        <h2 style="color:#0f3460; font-size:1.8rem; margin-bottom:1rem;">Bienvenidos a Team Mariel</h2>
-        <p style="font-size:1.1rem; max-width:600px; margin:0 auto 2rem;">Productos que llegan a tu familia, con la confianza de siempre.</p>
+    <div class="bienvenida">
+    <div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1586201375761-83865001248e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1509440159596-02497f371ff6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+    
+    <div class="bienvenida-texto">
+        <h2>Bienvenidos a Team Mariel</h2>
+        <p>Productos que llegan a tu familia, con la confianza de siempre.</p>
     </div>
+</div>
+
     <h3 style="text-align:center; margin:1.5rem 0 1rem; color:#0f3460;">Nuestros Productos</h3>
+  <!-- INFORMACIÓN IMPORTANTE -->
+<div class="carrusel-ofertas">
+    <div class="carrusel-texto">
+        <div>📍 Envíos solo a Mariel y zonas aledañas</div>
+        <div>🚚 Recibís en tu puerta o retirás en tienda</div>
+        <div>🎉 ¡Envío GRATIS en compras mayores a $2000 UYU!</div>
+    </div>
+</div>
+
     <div id="productos-publicos" class="productos"></div>
     <div style="text-align:center; margin-top:2.5rem;">
         <p style="font-size:1.05rem; margin-bottom:1rem;">Para comprar, inicia sesión o regístrate:</p>
@@ -378,6 +563,13 @@ button.boton {
 <!-- PANTALLA ADMIN — PEDIDOS RECIBIDOS -->
 <div id="pantalla-admin-pedidos" class="pantalla oculto">
     <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">📦 Pedidos Recibidos</h2>
+        <div style="text-align:center; margin-bottom:1rem;">
+        <button onclick="limpiarPedidosViejos()" style="background:#dc3545; color:white; border:none; padding:0.6rem 1.2rem; border-radius:6px; cursor:pointer; font-size:0.95rem;">
+            🗑️ Limpiar pedidos de hace +10 días
+        </button>
+        <p style="font-size:0.85rem; color:#666; margin-top:0.3rem;">Solo elimina los marcados como "Entregado" con más de 10 días</p>
+    </div>
+
     <div style="text-align:center; margin-bottom:1.5rem;">
         <button onclick="filtrarPedidosAdmin('todos')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Todos</button>
         <button onclick="filtrarPedidosAdmin('pendiente_validacion')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Pendientes</button>
@@ -1100,6 +1292,7 @@ function renderizarPedidosAdmin() {
         contenedor.appendChild(tarjeta);
     });
 }
+
 async function cambiarEstadoPedido(idPedido, nuevoEstado) {
     const indice = todosPedidos.findIndex(p => p.id === idPedido);
     if (indice === -1) {
@@ -1116,7 +1309,7 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
         // Si validamos el pago → descontamos el stock
         if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
             const pedido = todosPedidos[indice];
-            for (const item of pedido.productos) {
+            for (const item of (pedido.productos || [])) {
                 const productosRef = collection(window.db, "productos");
                 const q = query(productosRef, where("nombre", "==", item.nombre));
                 const snapshot = await getDocs(q);
@@ -1133,21 +1326,16 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
         // Actualizar el estado en Firebase
         await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
         
-        // ✅ Actualizar la lista local también
-        todosPedidos[indice].estado = nuevoEstado;
-        
-        // ✅ Refrescar pantalla
-        renderizarPedidosAdmin();
+        // ✅ Recargar página completa para evitar error de lectura
+        window.location.reload();
         
         console.log("✅ Estado cambiado a:", nuevoEstado);
-        alert('✅ Estado actualizado');
         
     } catch (error) {
         console.log("❌ Error:", error);
         alert('Hubo un error: ' + error.message);
     }
 }
-
 
 function filtrarPedidosAdmin(estado) {
     filtroPedidosAdmin = estado;
@@ -1230,6 +1418,44 @@ function mostrarPantalla(nombre) {
             filtroPedidosAdmin = 'todos';
             renderizarPedidosAdmin();
             break;
+    }
+}
+
+// ==============================================
+// LIMPIAR PEDIDOS ENTREGADOS DE HACE MÁS DE 10 DÍAS
+// ==============================================
+async function limpiarPedidosViejos() {
+    if (!confirm('⚠️ ¿Eliminar los pedidos entregados de hace más de 10 días?\n\nNo se puede deshacer.')) {
+        return;
+    }
+
+    try {
+        const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+        
+        const hoy = new Date();
+        const hace10Dias = new Date(hoy.getTime() - 10 * 24 * 60 * 60 * 1000);
+        let contador = 0;
+
+        // ✅ Usamos la lista que ya está cargada, NO volvemos a leer Firebase
+        for (const pedido of todosPedidos) {
+            if (pedido.fecha && pedido.estado === 'entregado') {
+                const fechaPedido = new Date(pedido.fecha);
+                if (fechaPedido < hace10Dias && pedido.id) {
+                    await deleteDoc(doc(window.db, "pedidos", pedido.id));
+                    contador++;
+                }
+            }
+        }
+
+        alert(contador === 0 
+            ? '✅ No hay pedidos antiguos para eliminar.' 
+            : `✅ Se eliminaron ${contador} pedidos correctamente.`);
+
+        mostrarPantalla('admin-pedidos');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ ' + error.message);
     }
 }
 
