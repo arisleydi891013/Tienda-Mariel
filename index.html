@@ -1326,8 +1326,10 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
         // Actualizar el estado en Firebase
         await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
         
-        // ✅ Recargar página completa para evitar error de lectura
-        window.location.reload();
+                // Refrescar solo la lista de pedidos
+        mostrarPantalla('admin-pedidos');
+        alert('✅ Estado actualizado');
+
         
         console.log("✅ Estado cambiado a:", nuevoEstado);
         
