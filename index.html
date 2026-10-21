@@ -731,12 +731,14 @@ async function escucharPedidos() {
             ...doc.data()
         }));
         
+        // ✅ AGREGA ESTA LÍNEA NUEVA 👇
+        if (!todosPedidos) todosPedidos = [];
+        
         // Refrescar pantallas automáticamente
         if (document.getElementById('lista-mis-pedidos')) renderizarMisPedidos();
         if (document.getElementById('lista-admin-pedidos')) renderizarPedidosAdmin();
     });
 }
-
 
 function renderizarProductos(contenedorId, soloVer = false) {
     const productos = obtenerProductos();
@@ -1235,7 +1237,7 @@ function renderizarPedidosAdmin() {
     const contenedor = document.getElementById('lista-admin-pedidos');
     if (!contenedor || !usuarioActual?.esAdmin) return;
 
-    let pedidos = todosPedidos;
+    let pedidos = todosPedidos || [];
     if (filtroPedidosAdmin !== 'todos') {
         pedidos = pedidos.filter(p => p.estado === filtroPedidosAdmin);
     }
@@ -1306,10 +1308,11 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
     const { doc, updateDoc, getDocs, collection, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
     
     try {
-        // Si validamos el pago → descontamos el stock
         if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
             const pedido = todosPedidos[indice];
-            for (const item of (pedido.productos || [])) {
+            const productos = pedido.productos || []; // ✅ Protección
+            
+            for (const item of productos) {
                 const productosRef = collection(window.db, "productos");
                 const q = query(productosRef, where("nombre", "==", item.nombre));
                 const snapshot = await getDocs(q);
@@ -1323,13 +1326,10 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
             }
         }
 
-        // Actualizar el estado en Firebase
         await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
         
-                // Refrescar solo la lista de pedidos
         mostrarPantalla('admin-pedidos');
         alert('✅ Estado actualizado');
-
         
         console.log("✅ Estado cambiado a:", nuevoEstado);
         
@@ -1338,6 +1338,7 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
         alert('Hubo un error: ' + error.message);
     }
 }
+
 
 function filtrarPedidosAdmin(estado) {
     filtroPedidosAdmin = estado;
