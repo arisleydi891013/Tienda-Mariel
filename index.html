@@ -1192,8 +1192,8 @@ function renderizarMisPedidos() {
     const contenedor = document.getElementById('lista-mis-pedidos');
     if (!contenedor || !usuarioActual) return;
 
-    const misPedidos = todosPedidos.filter(p => p.clienteId === usuarioActual.id);
-    
+    const misPedidos = (todosPedidos || []).filter(p => p.clienteId === usuarioActual.id);
+
     if (misPedidos.length === 0) {
         contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">No tienes pedidos todavía.</p>';
         return;
@@ -1466,6 +1466,9 @@ async function limpiarPedidosViejos() {
 // ==============================================
 // INICIO DE LA APLICACIÓN
 // ==============================================
+// Limpiar datos antiguos
+localStorage.removeItem('pedidos');
+
 escucharProductos();  // ← agrega esta línea
 escucharPedidos();  // ← agrega esta línea 
 verificarSesion();
