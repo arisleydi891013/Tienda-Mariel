@@ -208,6 +208,342 @@ button.boton {
     .carrusel-anterior { left: 0.5rem; }
     .carrusel-siguiente { right: 0.5rem; }
 }
+
+:root {
+    --azul: #12355b;
+    --dorado: #d7ad3d;
+    --gris-claro: #f0eee8;
+    --tinta: #243247;
+    --papel: #fbfaf7;
+    --sombra-suave: 0 14px 36px rgba(27, 45, 68, 0.09);
+}
+
+html { scroll-behavior: smooth; }
+body {
+    color: var(--tinta);
+    background:
+        radial-gradient(ellipse at 85% 4%, rgba(215,173,61,0.10), transparent 28rem),
+        var(--papel);
+}
+header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.65rem clamp(1rem, 3.5vw, 3.5rem);
+    border-bottom: 3px solid var(--dorado);
+    box-shadow: 0 8px 24px rgba(9, 28, 50, 0.14);
+    backdrop-filter: blur(14px);
+}
+.logo {
+    display: grid;
+    grid-template-areas: "title image" "tagline image";
+    grid-template-columns: max-content auto;
+    align-items: center;
+    column-gap: 1rem;
+    padding: 0;
+    text-align: left;
+}
+.logo h1 {
+    grid-area: title;
+    font-size: 1.55rem;
+    letter-spacing: 0.02em;
+    text-shadow: none;
+}
+.logo p { grid-area: tagline; font-size: 0.82rem; }
+.logo img {
+    grid-area: image;
+    width: 145px !important;
+    max-width: 145px !important;
+    height: 54px !important;
+    max-height: 54px !important;
+    margin: 0 !important;
+    object-fit: contain;
+    border-radius: 9px !important;
+}
+nav {
+    justify-content: flex-end;
+    gap: 0.45rem;
+    margin-top: 0;
+}
+nav button {
+    padding: 0.62rem 0.85rem;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    font-size: 0.88rem;
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+nav button:hover { transform: translateY(-1px); }
+nav label { font-size: 0.84rem; }
+nav select { border: 0; font-weight: 700; }
+.pantalla { max-width: 1240px; margin: 0 auto; padding: 1.5rem clamp(1rem, 3vw, 2rem) 3rem; }
+#pantalla-inicio { max-width: 1320px; padding-top: 1.5rem; }
+.carrusel-productos {
+    max-width: none;
+    height: clamp(250px, 31vw, 390px);
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.65);
+    border-radius: 26px;
+    box-shadow: 0 24px 55px rgba(15, 42, 70, 0.2);
+}
+.carrusel-productos > img { animation: foto-aparece 650ms ease both; }
+.carrusel-productos::after {
+    background: linear-gradient(90deg, rgba(7,25,45,0.72), rgba(7,25,45,0.12) 76%),
+        linear-gradient(0deg, rgba(7,25,45,0.25), transparent 55%);
+}
+.bienvenida-contenido {
+    align-items: flex-start;
+    padding: 2rem clamp(1.5rem, 7vw, 6rem);
+    text-align: left;
+}
+.bienvenida-contenido h2 { max-width: 720px; font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.08; }
+.bienvenida-contenido p { max-width: 520px; font-size: clamp(1rem, 2vw, 1.2rem); }
+.carrusel-control { width: 3rem; height: 3rem; border: 1px solid rgba(255,255,255,0.3); }
+.carrusel-control:hover, .carrusel-pausa:hover { background: var(--dorado); color: var(--azul); }
+.inicio-acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.25rem 0 1.5rem; }
+.inicio-acciones button, .inicio-acciones a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--azul);
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+.inicio-acciones .accion-principal { background: var(--azul); color: white; }
+.inicio-acciones .accion-secundaria { background: white; color: var(--azul); }
+.inicio-acciones .accion-enlace { border-color: transparent; background: transparent; color: var(--azul); }
+.inicio-acciones button:hover, .inicio-acciones a:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(18,53,91,0.14); }
+.beneficios-tienda {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin: 1.25rem 0 3rem;
+}
+.beneficio {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 78px;
+    padding: 1rem 1.15rem;
+    border: 1px solid rgba(18,53,91,0.08);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.86);
+    box-shadow: 0 7px 20px rgba(27,45,68,0.045);
+}
+.beneficio-icono { font-size: 1.45rem; }
+.beneficio strong { display: block; color: var(--azul); font-size: 0.95rem; }
+.beneficio span:last-child { color: #647184; font-size: 0.82rem; }
+.catalogo { scroll-margin-top: 110px; }
+.titulo-seccion { margin: 0 0 1.4rem; }
+.titulo-seccion span {
+    color: #94701b;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+.titulo-seccion h2 { margin-top: 0.25rem; color: var(--azul); font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.titulo-seccion p { margin-top: 0.3rem; color: #697789; }
+.productos { grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 1.2rem; }
+.producto {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(18,53,91,0.07);
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(27,45,68,0.07);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.producto:hover { transform: translateY(-5px); border-color: rgba(215,173,61,0.55); box-shadow: var(--sombra-suave); }
+.producto img { height: 205px; background: #f0eee8; }
+.producto-info { display: flex; flex: 1; flex-direction: column; padding: 1rem 1.05rem 1.1rem; }
+.producto h3 { margin-bottom: 0.45rem; font-size: 1.08rem; line-height: 1.35; }
+.producto .precio { margin: 0.65rem 0; color: #9a741a; font-size: 1.18rem; }
+.producto-info > button { margin-top: auto; }
+.producto button { min-height: 43px; border-radius: 11px; }
+.btn-ver { border: 1px solid #e3e7ec !important; }
+.btn-agregar { background: linear-gradient(135deg, var(--azul), #1b527e); }
+.btn-agregar:hover { opacity: 1; box-shadow: 0 7px 16px rgba(18,53,91,0.2); }
+.tarjeta {
+    border: 1px solid rgba(18,53,91,0.07);
+    border-radius: 20px;
+    box-shadow: var(--sombra-suave);
+}
+input, textarea, select { border-color: #d9dee5; background-color: white; }
+input:focus, textarea:focus, select:focus {
+    border-color: #7993ad;
+    outline: 3px solid rgba(18,53,91,0.12);
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 3px solid #e2bd5e;
+    outline-offset: 3px;
+}
+.boton { border-radius: 11px !important; }
+@keyframes foto-aparece {
+    from { opacity: 0.7; transform: scale(1.025); }
+    to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 820px) {
+    header { position: static; flex-direction: column; gap: 0.6rem; padding: 0.8rem 1rem; }
+    .logo { grid-template-columns: max-content auto; }
+    nav { justify-content: center; }
+    .beneficios-tienda { grid-template-columns: 1fr; gap: 0.55rem; margin-bottom: 2rem; }
+    .beneficio { min-height: 64px; }
+}
+    .remesas-destacadas {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 1.5rem;
+        overflow: hidden;
+        margin: 0 0 3rem;
+        padding: clamp(1.4rem, 3.5vw, 2.4rem);
+        border: 1px solid rgba(215,173,61,0.38);
+        border-radius: 24px;
+        background: linear-gradient(118deg, #102d4c, #17466c 70%, #1b5570);
+        box-shadow: 0 18px 42px rgba(18,53,91,0.17);
+        color: white;
+        background: linear-gradient(118deg, rgba(16,45,76,0.88), rgba(23,70,108,0.82) 70%, rgba(27,85,112,0.86));
+        backdrop-filter: blur(7px);
+    }
+    .remesas-destacadas::after {
+        position: absolute;
+        top: -5rem;
+        right: 12%;
+        width: 16rem;
+        height: 16rem;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 50%;
+        box-shadow: 0 0 0 2rem rgba(255,255,255,0.025), 0 0 0 4rem rgba(255,255,255,0.02);
+        content: "";
+        pointer-events: none;
+    }
+    .remesas-animacion {
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+    .billete {
+        position: absolute;
+        display: grid;
+        width: 150px;
+        height: 72px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,0.55);
+        border-radius: 10px;
+        color: rgba(255,255,255,0.84);
+        opacity: 0.24;
+        box-shadow: inset 0 0 0 4px rgba(255,255,255,0.09), 0 5px 16px rgba(4,20,36,0.16);
+    }
+    .billete::before {
+        position: absolute;
+        inset: 5px;
+        border: 1px dashed rgba(255,255,255,0.48);
+        border-radius: 7px;
+        content: "";
+    }
+    .billete-cup { background: linear-gradient(135deg, #5b927b, #376c76); }
+    .billete-usd { background: linear-gradient(135deg, #558b91, #396b87); }
+    .billete-marca {
+        position: absolute;
+        top: 10px;
+        left: 12px;
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+    }
+    .billete-simbolo { font-size: 1.45rem; font-weight: 800; }
+    .billete-cup-uno { top: 14%; left: -160px; animation: billete-cruza 25s linear infinite; }
+    .billete-usd-uno { top: 53%; left: -160px; animation: billete-cruza 29s linear 5s infinite; }
+    .billete-cup-dos { top: 30%; right: -160px; animation: billete-regresa 32s linear 2s infinite; }
+    .billete-usd-dos { top: 72%; right: -160px; animation: billete-regresa 28s linear 9s infinite; }
+    @keyframes billete-cruza {
+        from { transform: translateX(0) rotate(-12deg); }
+        to { transform: translateX(calc(100vw + 320px)) rotate(12deg); }
+    }
+    @keyframes billete-regresa {
+        from { transform: translateX(0) rotate(12deg); }
+        to { transform: translateX(calc(-100vw - 320px)) rotate(-12deg); }
+    }
+    .remesas-contenido, .remesas-accion, .remesas-nota { position: relative; z-index: 1; }
+    .remesas-etiqueta {
+        display: inline-block;
+        margin-bottom: 0.45rem;
+        color: #f0cf75;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .remesas-contenido h2 { margin-bottom: 0.45rem; font-size: clamp(1.45rem, 3vw, 2rem); }
+    .remesas-contenido p { max-width: 650px; color: rgba(255,255,255,0.84); }
+    .remesas-accion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        min-height: 48px;
+        padding: 0.75rem 1.2rem;
+        border-radius: 999px;
+        background: var(--dorado);
+        color: #172f49;
+        font-weight: 800;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .remesas-accion:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.2); }
+    .remesas-nota {
+        grid-column: 1 / -1;
+        margin: -0.5rem 0 0;
+        color: rgba(255,255,255,0.72);
+        font-size: 0.82rem;
+    }
+@media (max-width: 600px) {
+    .pantalla, #pantalla-inicio { padding: 1rem 0.85rem 2rem; }
+    .logo { column-gap: 0.65rem; }
+    .logo h1 { font-size: 1.35rem; }
+    .logo p { font-size: 0.75rem; }
+    .logo img { width: 105px !important; max-width: 105px !important; height: 45px !important; max-height: 45px !important; }
+    nav { gap: 0.4rem; }
+    nav button { padding: 0.55rem 0.7rem; font-size: 0.82rem; }
+    .carrusel-productos { height: 260px; border-radius: 20px; }
+    .bienvenida-contenido { align-items: center; padding: 1rem 3.2rem; text-align: center; }
+    .bienvenida-contenido h2 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+    .inicio-acciones { display: grid; grid-template-columns: 1fr 1fr; }
+    .inicio-acciones .accion-enlace { grid-column: 1 / -1; }
+    .productos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+    .producto { border-radius: 15px; }
+    .producto img { height: 150px; }
+    .producto-info { padding: 0.8rem; }
+    .producto h3 { font-size: 0.98rem; }
+    .remesas-destacadas { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+    .remesas-accion { justify-self: start; white-space: normal; }
+    .remesas-nota { margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -241,13 +577,41 @@ button.boton {
         <button type="button" class="carrusel-control carrusel-siguiente" aria-label="Foto siguiente" onclick="moverCarrusel(1)" hidden>›</button>
         <button type="button" id="carrusel-pausa" class="carrusel-pausa" aria-label="Pausar carrusel" onclick="alternarPausaCarrusel()" hidden>Pausar</button>
     </section>
-    <h3 style="text-align:center; margin:1.5rem 0 1rem; color:#0f3460;">Nuestros Productos</h3>
-    <div id="productos-publicos" class="productos"></div>
-    <div style="text-align:center; margin-top:2.5rem;">
-        <p style="font-size:1.05rem; margin-bottom:1rem;">Para comprar, inicia sesión o regístrate:</p>
-        <button onclick="mostrarPantalla('login')" class="boton dorado" style="width:auto; padding:0.7rem 2rem; margin:0 0.5rem;">Iniciar Sesión</button>
-        <button onclick="mostrarPantalla('registro')" class="boton azul" style="width:auto; padding:0.7rem 2rem; margin:0 0.5rem;">Registrarse</button>
+    <div class="inicio-acciones">
+        <a class="accion-principal" href="#productos-publicos">Ver productos</a>
+        <button type="button" class="accion-secundaria" onclick="mostrarPantalla('login')">Iniciar sesión</button>
+        <button type="button" class="accion-enlace" onclick="mostrarPantalla('registro')">Crear cuenta</button>
     </div>
+    <div class="beneficios-tienda" aria-label="Información de compra">
+        <div class="beneficio"><span class="beneficio-icono" aria-hidden="true">💱</span><span><strong>Precios claros</strong><span>Consulta en UYU y USD</span></span></div>
+        <div class="beneficio"><span class="beneficio-icono" aria-hidden="true">💳</span><span><strong>Pago flexible</strong><span>Transferencia o Zelle</span></span></div>
+        <div class="beneficio"><span class="beneficio-icono" aria-hidden="true">🚚</span><span><strong>Elige cómo recibir</strong><span>Retiro o envío a domicilio</span></span></div>
+    </div>
+    <section class="remesas-destacadas" aria-labelledby="titulo-remesas">
+        <div class="remesas-animacion" aria-hidden="true">
+            <span class="billete billete-cup billete-cup-uno"><span class="billete-marca">CUP</span><span class="billete-simbolo">CUP</span></span>
+            <span class="billete billete-usd billete-usd-uno"><span class="billete-marca">USD</span><span class="billete-simbolo">$</span></span>
+            <span class="billete billete-cup billete-cup-dos"><span class="billete-marca">CUP</span><span class="billete-simbolo">CUP</span></span>
+            <span class="billete billete-usd billete-usd-dos"><span class="billete-marca">USD</span><span class="billete-simbolo">$</span></span>
+        </div>
+        <div class="remesas-contenido">
+            <span class="remesas-etiqueta">También estamos para ayudarte</span>
+            <h2 id="titulo-remesas">¿Necesitas enviar dinero?</h2>
+            <p>Únete al grupo de Team Mariel para conocer las ofertas vigentes. Para una consulta personal, nuestro equipo te atenderá por privado.</p>
+        </div>
+        <a class="remesas-accion" href="https://chat.whatsapp.com/GrtXZQ9LTTdLQyrEKxFfic?s=cI&amp;p=a&amp;iam=2" target="_blank" rel="noopener noreferrer">
+            <span aria-hidden="true">💬</span> Ver ofertas en WhatsApp <span aria-hidden="true">↗</span>
+        </a>
+        <p class="remesas-nota">Por seguridad, no compartas datos personales ni financieros en el grupo.</p>
+    </section>
+    <section class="catalogo" aria-labelledby="titulo-catalogo">
+        <div class="titulo-seccion">
+            <span>Elegidos para ti</span>
+            <h2 id="titulo-catalogo">Nuestros productos</h2>
+            <p>Explora lo que tenemos disponible y encuentra tus favoritos.</p>
+        </div>
+        <div id="productos-publicos" class="productos"></div>
+    </section>
 </div>
 
 <!-- PANTALLA REGISTRO -->
@@ -294,6 +658,26 @@ button.boton {
         <div class="enlace">
             ¿No tienes cuenta? <span onclick="mostrarPantalla('registro')">Regístrate</span>
         </div>
+    </div>
+</div>
+
+<!-- PANTALLA CAMBIO DE CORREO -->
+<div id="pantalla-cambiar-correo" class="pantalla oculto">
+    <div class="tarjeta">
+        <h2>Cambiar correo electrónico</h2>
+        <p style="margin-bottom:1rem;">Cuenta actual: <strong id="correo-actual"></strong></p>
+        <form onsubmit="return solicitarCambioCorreo(event)">
+            <div class="grupo">
+                <label for="cambio-correo-nuevo">Nuevo correo electrónico:</label>
+                <input type="email" id="cambio-correo-nuevo" autocomplete="email" required>
+            </div>
+            <div class="grupo">
+                <label for="cambio-correo-clave">Contraseña actual:</label>
+                <input type="password" id="cambio-correo-clave" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="boton dorado">Enviar verificación</button>
+        </form>
+        <p style="margin-top:1rem;">El correo solo cambiará después de confirmar el enlace enviado a la nueva dirección. Tus pedidos seguirán asociados a esta cuenta.</p>
     </div>
 </div>
 
@@ -690,6 +1074,43 @@ async function iniciarSesion(e) {
     } catch (error) {
         console.error('No se pudo iniciar sesión:', error);
         alert('Correo o contraseña incorrectos, o la cuenta no está habilitada en Firebase Authentication.');
+    }
+    return false;
+}
+
+async function solicitarCambioCorreo(e) {
+    e.preventDefault();
+    const firebaseUser = window.auth?.currentUser;
+    const nuevoCorreo = document.getElementById('cambio-correo-nuevo').value.trim().toLowerCase();
+    const clave = document.getElementById('cambio-correo-clave').value;
+
+    if (!firebaseUser?.email || !usuarioActual) {
+        alert('Inicia sesión antes de cambiar el correo.');
+        return false;
+    }
+    if (nuevoCorreo === firebaseUser.email.toLowerCase()) {
+        alert('El nuevo correo debe ser diferente al actual.');
+        return false;
+    }
+
+    try {
+        const { EmailAuthProvider, reauthenticateWithCredential, verifyBeforeUpdateEmail } =
+            await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js");
+        const credencial = EmailAuthProvider.credential(firebaseUser.email, clave);
+        await reauthenticateWithCredential(firebaseUser, credencial);
+        await verifyBeforeUpdateEmail(firebaseUser, nuevoCorreo);
+        document.getElementById('cambio-correo-clave').value = '';
+        alert(`Enviamos un enlace de verificación a ${nuevoCorreo}. El correo actual seguirá activo hasta que confirmes el enlace.`);
+    } catch (error) {
+        console.error('No se pudo solicitar el cambio de correo:', error);
+        const mensaje = error.code === 'auth/email-already-in-use'
+            ? 'Ese correo ya está asociado a otra cuenta.'
+            : error.code === 'auth/invalid-email'
+                ? 'El nuevo correo no tiene un formato válido.'
+                : error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password'
+                    ? 'La contraseña actual es incorrecta.'
+                    : 'No se pudo enviar la verificación. Comprueba los datos e inténtalo nuevamente.';
+        alert(mensaje);
     }
     return false;
 }
@@ -1621,6 +2042,7 @@ function actualizarMenu() {
             <button onclick="mostrarPantalla('tienda')" id="nav-tienda">🏪 Tienda</button>
             <button onclick="mostrarPantalla('carrito')" id="nav-carrito">🛒 Carrito (${carrito.reduce((s,i)=>s+i.cantidad,0)})</button>
             <button onclick="mostrarPantalla('mis-pedidos')" id="nav-mis-pedidos">📋 Mis Pedidos</button>
+            <button onclick="mostrarPantalla('cambiar-correo')" id="nav-cambiar-correo">✉️ Cambiar correo</button>
             <button onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
         `;
     }
@@ -1677,6 +2099,10 @@ function mostrarPantalla(nombre) {
         case 'mis-pedidos':
             if (!usuarioActual) return mostrarPantalla('login');
             renderizarMisPedidos();
+            break;
+        case 'cambiar-correo':
+            if (!usuarioActual || !window.auth.currentUser) return mostrarPantalla('login');
+            document.getElementById('correo-actual').textContent = usuarioActual.correo;
             break;
         case 'admin-productos':
             if (!usuarioActual?.esAdmin) return mostrarPantalla('inicio');
