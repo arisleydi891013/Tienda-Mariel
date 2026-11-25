@@ -64,12 +64,79 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 .oculto { display: none !important; }
 
 /* Tarjetas de productos */
-.productos { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+.productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+.carrusel-productos {
+    position: relative;
+    max-width: 1100px;
+    height: clamp(190px, 24vw, 280px);
+    margin: 0 auto 1.5rem;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--azul);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.16);
 }
-
+.carrusel-productos > img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.carrusel-productos > img[hidden] { display: none; }
+.carrusel-productos::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,0.58), rgba(0,0,0,0.18), rgba(0,0,0,0.42));
+    content: "";
+    pointer-events: none;
+}
+.bienvenida-contenido {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 4.5rem;
+    color: white;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.75);
+    pointer-events: none;
+}
+.bienvenida-contenido h2 { margin-bottom: 0.4rem; font-size: clamp(1.5rem, 3.8vw, 2.3rem); }
+.bienvenida-contenido p { max-width: 620px; font-size: clamp(0.9rem, 1.8vw, 1.1rem); }
+.carrusel-titulo {
+    margin-top: 0.65rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(15,52,96,0.78);
+    color: white;
+    font-size: 0.95rem;
+    text-shadow: none;
+}
+.carrusel-control {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    width: 2.8rem;
+    height: 2.8rem;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 50%;
+    background: rgba(15,52,96,0.82);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.carrusel-anterior { left: 1rem; }
+.carrusel-siguiente { right: 1rem; }
+.carrusel-pausa {
+    position: absolute;
+    z-index: 2;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.45rem 0.7rem;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(15,52,96,0.88);
+    color: white;
+    cursor: pointer;
+}
 .producto {
     background: white;
     border-radius: 12px;
@@ -77,33 +144,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     transition: transform 0.2s;
 }
-
-.producto:hover { 
-    transform: translateY(-3px);
-}
-
-.producto img { 
-    width: 100%; 
-    height: 130px;
-    object-fit: cover;
-}
-
-.producto-info { 
-    padding: 0.8rem;
-}
-
-.producto h3 { 
-    font-size: 0.95rem;
-    margin-bottom: 0.3rem;
-}
-
-.producto .precio { 
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--dorado);
-    margin: 0.3rem 0;
-}
-
+.producto:hover { transform: translateY(-3px); }
+.producto img { width: 100%; height: 180px; object-fit: cover; background: var(--gris-claro); }
+.producto-info { padding: 1rem; }
+.producto h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--azul); }
+.producto .precio { font-size: 1.25rem; font-weight: 700; color: var(--dorado); margin: 0.5rem 0; }
 .producto button {
     width: 100%;
     padding: 0.7rem;
@@ -111,28 +156,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    background: var(--azul);
-    color: white;
-    transition: background 0.2s;
+    transition: opacity 0.2s;
 }
-
-.producto button:hover {
-    background: #1a4a7a;
-}
-
-.btn-ver { 
-    background: var(--gris-claro);
-    color: var(--azul);
-}
-
-.btn-agregar { 
-    background: var(--azul);
-    color: white;
-}
-
-.btn-agregar:hover { 
-    opacity: 0.9;
-}
+.btn-ver { background: var(--gris-claro); color: var(--azul); cursor: default; }
+.btn-agregar { background: var(--azul); color: white; }
+.btn-agregar:hover { opacity: 0.9; }
 
 /* Formularios */
 .tarjeta {
@@ -175,126 +203,11 @@ button.boton {
     main { padding: 1rem; }
     .tarjeta { padding: 1.5rem; }
     .productos { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .carrusel-productos { height: 210px; }
+    .bienvenida-contenido { padding: 0.8rem 3.5rem; }
+    .carrusel-anterior { left: 0.5rem; }
+    .carrusel-siguiente { right: 0.5rem; }
 }
-      /* =====================================
-   CARRUSEL DE INFORMACIÓN
-   ===================================== */
-
-.carrusel-ofertas {
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--azul), #16213e);
-    border-radius: 10px;
-    margin-bottom: 2rem;
-    height: 75px;
-}
-
-.carrusel-texto {
-    display: flex;
-    animation: deslizarInfo 10s infinite;
-    width: 300%;
-}
-
-.carrusel-texto > div {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--dorado);
-    font-weight: 600;
-    font-size: 0.92rem;
-    text-align: center;
-    padding: 0 1rem;
-}
-
-@keyframes deslizarInfo {
-    0% { transform: translateX(0); }
-    30% { transform: translateX(0); }
-    33% { transform: translateX(-33.33%); }
-    63% { transform: translateX(-33.33%); }
-    66% { transform: translateX(-66.66%); }
-    96% { transform: translateX(-66.66%); }
-    100% { transform: translateX(0); }
-}
-/* =====================================
-   CARRUSEL DE FONDO EN BIENVENIDA
-   ===================================== */
-
-.bienvenida {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--azul), #16213e);
-    margin: 1rem;
-    min-height: 280px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.carrusel-fondo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.carrusel-foto {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    animation: cambiarFoto 20s infinite ease-in-out;
-}
-
-/* Cada foto aparece cada 2 segundos — 10 fotos = ciclo de 20s */
-.carrusel-foto:nth-child(1)  { animation-delay:  0s; }
-.carrusel-foto:nth-child(2)  { animation-delay:  2s; }
-.carrusel-foto:nth-child(3)  { animation-delay:  4s; }
-.carrusel-foto:nth-child(4)  { animation-delay:  6s; }
-.carrusel-foto:nth-child(5)  { animation-delay:  8s; }
-.carrusel-foto:nth-child(6)  { animation-delay: 10s; }
-.carrusel-foto:nth-child(7)  { animation-delay: 12s; }
-.carrusel-foto:nth-child(8)  { animation-delay: 14s; }
-.carrusel-foto:nth-child(9)  { animation-delay: 16s; }
-.carrusel-foto:nth-child(10) { animation-delay: 18s; }
-
-@keyframes cambiarFoto {
-    0%   { opacity: 0; }
-    10%  { opacity: 1; }
-    40%  { opacity: 1; }
-    50%  { opacity: 0; }
-    100% { opacity: 0; }
-}
-
-.bienvenida-texto {
-    position: relative;
-    z-index: 2;
-    padding: 2rem 1rem;
-    text-align: center;
-}
-
-.bienvenida-texto h2 {
-    color: var(--dorado);
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
-
-.bienvenida-texto p {
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto;
-    color: white;
-}
-
-
     </style>
 </head>
 <body>
@@ -317,33 +230,18 @@ button.boton {
 </main>
 <!-- PANTALLA INICIO (PÚBLICA) -->
 <div id="pantalla-inicio" class="pantalla oculto">
-    <div class="bienvenida">
-    <div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1586201375761-83865001248e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1509440159596-02497f371ff6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-<div class="carrusel-foto" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-    
-    <div class="bienvenida-texto">
-        <h2>Bienvenidos a Team Mariel</h2>
-        <p>Productos que llegan a tu familia, con la confianza de siempre.</p>
-    </div>
-</div>
-
+    <section id="carrusel-productos" class="carrusel-productos" aria-label="Productos destacados" aria-roledescription="carrusel">
+        <img id="carrusel-imagen" alt="" hidden>
+        <div class="bienvenida-contenido">
+            <h2>Bienvenidos a Team Mariel</h2>
+            <p>Productos que llegan a tu familia, con la confianza de siempre.</p>
+            <h3 id="carrusel-titulo" class="carrusel-titulo" aria-live="off" hidden></h3>
+        </div>
+        <button type="button" class="carrusel-control carrusel-anterior" aria-label="Foto anterior" onclick="moverCarrusel(-1)" hidden>‹</button>
+        <button type="button" class="carrusel-control carrusel-siguiente" aria-label="Foto siguiente" onclick="moverCarrusel(1)" hidden>›</button>
+        <button type="button" id="carrusel-pausa" class="carrusel-pausa" aria-label="Pausar carrusel" onclick="alternarPausaCarrusel()" hidden>Pausar</button>
+    </section>
     <h3 style="text-align:center; margin:1.5rem 0 1rem; color:#0f3460;">Nuestros Productos</h3>
-  <!-- INFORMACIÓN IMPORTANTE -->
-<div class="carrusel-ofertas">
-    <div class="carrusel-texto">
-        <div>📍 Envíos solo a Mariel y zonas aledañas</div>
-        <div>🚚 Recibís en tu puerta o retirás en tienda</div>
-        <div>🎉 ¡Envío GRATIS en compras mayores a $2000 UYU!</div>
-    </div>
-</div>
-
     <div id="productos-publicos" class="productos"></div>
     <div style="text-align:center; margin-top:2.5rem;">
         <p style="font-size:1.05rem; margin-bottom:1rem;">Para comprar, inicia sesión o regístrate:</p>
@@ -396,9 +294,6 @@ button.boton {
         <div class="enlace">
             ¿No tienes cuenta? <span onclick="mostrarPantalla('registro')">Regístrate</span>
         </div>
-        <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #ddd; text-align:center; font-size:0.9rem; color:#666;">
-            <p>🔐 Administrador: <span onclick="document.getElementById('login-correo').value='admin@teammariel.com'; document.getElementById('login-clave').value='admin123';">acceso rápido</span></p>
-        </div>
     </div>
 </div>
 
@@ -413,7 +308,8 @@ button.boton {
     <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">Tu Carrito 🛒</h2>
     <div id="lista-carrito"></div>
     <div style="text-align:right; font-size:1.3rem; margin:1.5rem 0; padding-right:1rem;">
-        <strong>Total: $<span id="total-carrito">0.00</span> UYU</strong>
+        <strong>Total: <span id="total-carrito">UYU 0,00</span></strong>
+        <div id="total-carrito-usd" style="font-size:0.95rem; color:#666;"></div>
     </div>
     <div style="text-align:center; margin-top:2rem;">
         <button onclick="mostrarPantalla('tienda')" class="boton azul" style="width:auto; margin-right:1rem;">Seguir Comprando</button>
@@ -449,15 +345,15 @@ button.boton {
     
     <label style="display:block; cursor:pointer; font-size:0.95rem;">
         <input type="radio" name="entrega" value="domicilio" onchange="actualizarTotalConEnvio()">
-        🚚 Envío a Domicilio — <strong>$<span id="precio-envio-muestra">0</span> UYU</strong>
+    🚚 Envío a Domicilio — <strong><span id="precio-envio-muestra">UYU 0,00</span> <small id="precio-envio-muestra-usd"></small></strong>
     </label>
 </div>
 
 <div style="margin-top:1rem; padding-top:1rem; border-top:2px solid #ddd; font-size:1.05rem;">
-    <p>Subtotal productos: $<span id="subtotal-productos">0.00</span> UYU</p>
-    <p id="linea-envio" style="display:none;">Envío a domicilio: $<span id="mostrar-envio">0.00</span> UYU</p>
+    <p>Subtotal productos: <span id="subtotal-productos">UYU 0,00</span> <small id="subtotal-productos-usd" style="color:#666;"></small></p>
+    <p id="linea-envio" style="display:none;">Envío a domicilio: <span id="mostrar-envio">UYU 0,00</span> <small id="mostrar-envio-usd" style="color:#666;"></small></p>
     <p style="font-size:1.2rem; font-weight:bold; color:#d4af37; margin-top:0.5rem;">
-        Total a pagar: $<span id="total-final">0.00</span> UYU
+        Total a pagar: <span id="total-final">UYU 0,00</span> <small id="total-final-usd" style="font-size:0.75rem;color:#666;"></small>
     </p>
 </div>
 
@@ -474,38 +370,25 @@ button.boton {
     <div class="tarjeta" style="max-width:550px;">
         <h2>💳 Datos para el Pago</h2>
         <div style="background:#f5f5f5; padding:1.2rem; border-radius:8px; margin:1rem 0; line-height:1.8;">
-    <h3 style="margin:0 0 1rem 0; color:#2e7d32;">🏦 Datos para transferir</h3>
+    <h3 id="titulo-instrucciones-pago" style="margin:0 0 1rem 0; color:#2e7d32;">🏦 Datos para transferir</h3>
 
-<!-- Opción 1 Prex -->
-<div style="background:#fff; padding:1rem; border-radius:6px; margin-bottom:0.8rem; border:1px solid #ddd;">
-    <p><strong>Plataforma:</strong> Prex</p>
-    <p><strong>Titular:</strong> Arisleydi Toirac Lobaina</p>
-    <p><strong>Número:</strong> 19883610</p>
-</div>
-
-<!-- Opción 2 Oca Blue -->
-<div style="background:#fff; padding:1rem; border-radius:6px; margin-bottom:0.8rem; border:1px solid #ddd;">
-    <p><strong>Plataforma:</strong> Oca Blue</p>
-    <p><strong>Titular:</strong> Arisleydi Toirac Lobaina</p>
-    <p><strong>Número:</strong> 7689046</p>
-</div>
-
-<!-- Opción 3 Mi Dinero -->
-<div style="background:#fff; padding:1rem; border-radius:6px; border:1px solid #ddd;">
-    <p><strong>Plataforma:</strong> Mi Dinero</p>
-    <p><strong>Titular:</strong> Arisleydi Toirac Lobaina</p>
-    <p><strong>Número:</strong> 3701759156</p>
-</div>
-
+    <div style="background:#fff; padding:1rem; border-radius:6px; margin-bottom:0.8rem; border:1px solid #ddd;">
+        <strong>Moneda del pago:</strong>
+        <label style="margin-top:0.6rem;"><input type="radio" name="moneda-pago" value="UYU" checked onchange="seleccionarMonedaPago()"> Pesos uruguayos (UYU)</label>
+        <label style="margin-top:0.4rem;"><input type="radio" name="moneda-pago" value="USD" id="opcion-pago-usd" onchange="seleccionarMonedaPago()"> Dólares estadounidenses (USD) — Zelle</label>
+    </div>
+    <p id="aviso-cotizacion" style="font-size:0.9rem; color:#666; margin-bottom:0.8rem;"></p>
+    <div id="datos-transferencia" style="background:#fff; padding:1rem; border-radius:6px; margin-bottom:0.8rem; border:1px solid #ddd; white-space:pre-wrap;"></div>
 
     <hr style="margin:1rem 0; border:none; border-top:1px solid #ccc;">
-    <p style="font-size:1.1rem; color:#d4af37;"><strong>Total a pagar: $<span id="total-pago">0.00</span> UYU</strong></p>
-    <p style="font-size:0.9rem; color:#d32f2f; margin-top:0.8rem;">⚠️ Solo para transferencias. No compartir códigos ni contraseñas.</p>
+    <p style="font-size:1.1rem; color:#d4af37;"><strong>Importe a transferir: <span id="total-pago">UYU 0,00</span></strong></p>
+    <p id="equivalente-pago" style="font-size:0.9rem; color:#666;"></p>
+    <p style="font-size:0.9rem; color:#d32f2f; margin-top:0.8rem;">⚠️ Transfiere exactamente en la moneda seleccionada y adjunta el comprobante.</p>
 </div>
 
         <form onsubmit="return confirmarPago(event)">
             <div class="grupo">
-                <label>Subir comprobante de transferencia (imagen):</label>
+                <label>Subir comprobante de pago (imagen de transferencia o Zelle):</label>
                 <input type="file" id="comprobante-pago" accept="image/*" required>
                 <div id="vista-comprobante" style="margin-top:0.5rem; text-align:center;"></div>
             </div>
@@ -557,6 +440,18 @@ button.boton {
             </div>
         </form>
     </div>
+    <div class="tarjeta" style="max-width:550px; margin:0 auto 2rem;">
+        <h3 style="color:#0f3460; margin-bottom:0.5rem;">Configuración de monedas y transferencias</h3>
+        <p style="font-size:0.9rem; color:#666; margin-bottom:1rem;">El precio de los productos se administra en UYU. La cotización indica cuántos pesos uruguayos equivalen a 1 USD.</p>
+        <form onsubmit="return guardarConfiguracionTienda(event)">
+            <div class="grupo">
+                <label for="tasa-uyu-usd">Cotización (UYU por 1 USD):</label>
+                <input type="number" id="tasa-uyu-usd" min="0.01" step="0.01" required>
+            </div>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:1rem;">Los datos de Zelle se compartirán por privado con el cliente; no se guardan ni se muestran en esta página.</p>
+            <button type="submit" class="boton dorado">Guardar configuración</button>
+        </form>
+    </div>
     <h3 style="margin-bottom:1rem;">Lista de Productos</h3>
     <div id="lista-admin-productos" class="productos"></div>
 </div>
@@ -564,13 +459,6 @@ button.boton {
 <!-- PANTALLA ADMIN — PEDIDOS RECIBIDOS -->
 <div id="pantalla-admin-pedidos" class="pantalla oculto">
     <h2 style="text-align:center; margin-bottom:1.5rem; color:#0f3460;">📦 Pedidos Recibidos</h2>
-        <div style="text-align:center; margin-bottom:1rem;">
-        <button onclick="limpiarPedidosViejos()" style="background:#dc3545; color:white; border:none; padding:0.6rem 1.2rem; border-radius:6px; cursor:pointer; font-size:0.95rem;">
-            🗑️ Limpiar pedidos de hace +10 días
-        </button>
-        <p style="font-size:0.85rem; color:#666; margin-top:0.3rem;">Solo elimina los marcados como "Entregado" con más de 10 días</p>
-    </div>
-
     <div style="text-align:center; margin-bottom:1.5rem;">
         <button onclick="filtrarPedidosAdmin('todos')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Todos</button>
         <button onclick="filtrarPedidosAdmin('pendiente_validacion')" class="boton azul" style="width:auto; padding:0.5rem 1rem; margin:0.25rem;">Pendientes</button>
@@ -587,122 +475,332 @@ button.boton {
 // CONFIGURACIÓN DE LA APLICACIÓN
 // ==============================================
 const ADMIN_CORREO = 'admin@teammariel.com';
-const ADMIN_CLAVE = 'admin123';
 let usuarioActual = null;
 let carrito = [];
 let datosEnvio = {};
 let comprobanteBase64 = '';
 let filtroPedidosAdmin = 'todos';
+let cotizacionPago = null;
+let errorConfiguracionTienda = false;
+let monedaVista = localStorage.getItem('monedaVista') === 'USD' ? 'USD' : 'UYU';
+const TRANSFERENCIA_UYU_PREDETERMINADA = 'Banco: Banco de la República Oriental del Uruguay\nTitular: Team Mariel\nCuenta: 001-234567-8';
+let configTienda = {
+    tasaUYUPorUSD: 0,
+    transferenciaUYU: TRANSFERENCIA_UYU_PREDETERMINADA
+};
 
-// ==============================================
-// GESTIÓN DE USUARIOS Y SESIÓN
-// ==============================================
-function obtenerUsuarios() {
-    return JSON.parse(localStorage.getItem('usuarios') || '[]');
+const formatoMoneda = new Intl.NumberFormat('es-UY', {
+    style: 'currency',
+    currency: 'UYU',
+    currencyDisplay: 'code',
+    minimumFractionDigits: 2
+});
+const formatoDolares = new Intl.NumberFormat('es-UY', {
+    style: 'currency',
+    currency: 'USD',
+    currencyDisplay: 'code',
+    minimumFractionDigits: 2
+});
+
+function formatearMontoUYU(monto) {
+    return formatoMoneda.format(Number(monto) || 0);
 }
 
-function guardarUsuarios(usuarios) {
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+function formatearMontoUSD(monto) {
+    return formatoDolares.format(Number(monto) || 0);
 }
 
-function registrarUsuario(e) {
+function formatearMontoVista(montoUYU) {
+    if (monedaVista === 'USD') {
+        const montoUSD = convertirUYUaUSD(montoUYU);
+        return montoUSD === null ? 'Cotización no disponible' : formatearMontoUSD(montoUSD);
+    }
+    return formatearMontoUYU(montoUYU);
+}
+
+function mostrarMonedaSecundaria(montoUYU) {
+    if (monedaVista === 'USD') return `(${formatearMontoUYU(montoUYU)})`;
+    const montoUSD = convertirUYUaUSD(montoUYU);
+    return montoUSD === null ? '' : `(aprox. ${formatearMontoUSD(montoUSD)})`;
+}
+
+function convertirUYUaUSD(montoUYU, tasa = configTienda.tasaUYUPorUSD) {
+    if (!Number.isFinite(Number(tasa)) || Number(tasa) <= 0) return null;
+    return Math.round((Number(montoUYU) / Number(tasa) + Number.EPSILON) * 100) / 100;
+}
+
+function mostrarPrecioDual(montoUYU) {
+    return `${formatearMontoVista(montoUYU)} <small style="color:#666;">${mostrarMonedaSecundaria(montoUYU)}</small>`;
+}
+
+function cambiarMonedaVista(moneda) {
+    if (moneda !== 'UYU' && moneda !== 'USD') return;
+    if (moneda === 'USD' && !(configTienda.tasaUYUPorUSD > 0)) {
+        alert('La tienda todavía no tiene una cotización USD disponible.');
+        actualizarMenu();
+        return;
+    }
+
+    monedaVista = moneda;
+    localStorage.setItem('monedaVista', monedaVista);
+    const opcionPago = document.querySelector(`input[name="moneda-pago"][value="${moneda}"]`);
+    if (opcionPago && !opcionPago.disabled) {
+        opcionPago.checked = true;
+        cotizacionPago = moneda === 'USD' ? configTienda.tasaUYUPorUSD : null;
+    }
+    actualizarMenu();
+    ['productos-publicos', 'productos-tienda'].forEach(id => {
+        if (document.getElementById(id)) renderizarProductos(id, id === 'productos-publicos');
+    });
+    if (document.getElementById('lista-carrito')) renderizarCarrito();
+    actualizarTotalConEnvio();
+    actualizarResumenPago();
+}
+
+function formatearTotalPedido(pedido) {
+    const totalUYU = Number(pedido.totalUYU ?? pedido.total) || 0;
+    const tasaGuardada = Number(pedido.cotizacionUYUPorUSD);
+    const tasaValida = Number.isFinite(tasaGuardada) && tasaGuardada > 0;
+    const totalUSD = pedido.totalUSD !== undefined && pedido.totalUSD !== null
+        ? Number(pedido.totalUSD)
+        : tasaValida ? convertirUYUaUSD(totalUYU, tasaGuardada) : null;
+    const monedaPago = pedido.monedaPago || 'UYU';
+    const importePago = monedaPago === 'USD' && Number.isFinite(totalUSD)
+        ? formatearMontoUSD(totalUSD)
+        : formatearMontoUYU(totalUYU);
+    const referencia = monedaPago === 'USD'
+        ? `Pago en USD: ${importePago}${tasaValida ? ` (cotización ${tasaGuardada.toFixed(2)} UYU/USD)` : ''}`
+        : `Pago en UYU: ${importePago}`;
+    return `${formatearMontoUYU(totalUYU)} — ${referencia}`;
+}
+
+function formatearProductoPedido(item, pedido) {
+    const totalUYU = item.precio * item.cantidad;
+    const tasaGuardada = Number(pedido.cotizacionUYUPorUSD);
+    const totalUSD = convertirUYUaUSD(totalUYU, tasaGuardada);
+    return totalUSD === null
+        ? formatearMontoUYU(totalUYU)
+        : `${formatearMontoUYU(totalUYU)} (${formatearMontoUSD(totalUSD)} al cambio del pedido)`;
+}
+
+async function escucharConfiguracionTienda() {
+    const { doc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    onSnapshot(doc(window.db, "configuracion", "tienda"), (snapshot) => {
+        const datos = snapshot.exists() ? snapshot.data() : {};
+        errorConfiguracionTienda = false;
+        configTienda = {
+            tasaUYUPorUSD: Number(datos.tasaUYUPorUSD) || 0,
+            transferenciaUYU: TRANSFERENCIA_UYU_PREDETERMINADA
+        };
+        actualizarMenu();
+        cargarConfiguracionEnFormulario();
+        actualizarResumenPago();
+        actualizarTotalConEnvio();
+        ['productos-publicos', 'productos-tienda'].forEach(id => {
+            if (document.getElementById(id)) renderizarProductos(id, id === 'productos-publicos');
+        });
+        if (document.getElementById('lista-carrito')) renderizarCarrito();
+    }, (error) => {
+        console.error('No se pudo cargar la configuración de moneda:', error);
+        errorConfiguracionTienda = true;
+        actualizarResumenPago();
+    });
+}
+
+function cargarConfiguracionEnFormulario() {
+    const tasa = document.getElementById('tasa-uyu-usd');
+    if (tasa && !tasa.matches(':focus')) tasa.value = configTienda.tasaUYUPorUSD || '';
+}
+
+async function guardarConfiguracionTienda(e) {
+    e.preventDefault();
+    const tasaUYUPorUSD = Number(document.getElementById('tasa-uyu-usd').value);
+    if (!Number.isFinite(tasaUYUPorUSD) || tasaUYUPorUSD <= 0) {
+        return alert('Ingresa una cotización válida, mayor que cero.');
+    }
+
+    try {
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+        await setDoc(doc(window.db, "configuracion", "tienda"), {
+            tasaUYUPorUSD,
+            actualizadoEn: new Date().toISOString()
+        }, { merge: true });
+        alert('✅ Cotización guardada.');
+    } catch (error) {
+        console.error('No se pudo guardar la configuración de la tienda:', error);
+        alert('No se pudo guardar la configuración. Verifica tu conexión e inténtalo nuevamente.');
+    }
+    return false;
+}
+
+// ==============================================
+// AUTENTICACIÓN FIREBASE
+// ==============================================
+function crearUsuarioDeSesion(firebaseUser) {
+    const esAdmin = firebaseUser.email?.toLowerCase() === ADMIN_CORREO;
+    return {
+        id: firebaseUser.uid,
+        nombre: firebaseUser.displayName || (esAdmin ? 'Administrador' : firebaseUser.email),
+        correo: firebaseUser.email,
+        esAdmin
+    };
+}
+
+async function registrarUsuario(e) {
     e.preventDefault();
     const nombre = document.getElementById('reg-nombre').value.trim();
     const correo = document.getElementById('reg-correo').value.trim().toLowerCase();
     const clave = document.getElementById('reg-clave').value;
+    if (!nombre || !correo.includes('@') || clave.length < 6) {
+        return alert('Completa los datos y usa una contraseña de al menos 6 caracteres.');
+    }
 
-    if (!correo.includes('@')) return alert('Ingresa un correo válido');
-    if (clave.length < 6) return alert('La contraseña debe tener al menos 6 caracteres');
-
-    const usuarios = obtenerUsuarios();
-    if (usuarios.some(u => u.correo === correo)) return alert('Este correo ya está registrado');
-
-    const nuevoUsuario = { id: 'user_' + Date.now(), nombre, correo, clave, esAdmin: false };
-    usuarios.push(nuevoUsuario);
-    guardarUsuarios(usuarios);
-    alert('✅ Cuenta creada correctamente. Ahora inicia sesión.');
-    mostrarPantalla('login');
+    try {
+        const { createUserWithEmailAndPassword, updateProfile } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js");
+        const credencial = await createUserWithEmailAndPassword(window.auth, correo, clave);
+        await updateProfile(credencial.user, { displayName: nombre });
+        usuarioActual = crearUsuarioDeSesion(credencial.user);
+        alert(`✅ Cuenta creada. Bienvenido, ${nombre}.`);
+        actualizarMenu();
+        mostrarPantalla('tienda');
+    } catch (error) {
+        console.error('No se pudo crear la cuenta:', error);
+        const mensaje = error.code === 'auth/email-already-in-use'
+            ? 'Este correo ya está registrado.'
+            : error.code === 'auth/weak-password'
+                ? 'La contraseña debe tener al menos 6 caracteres.'
+                : 'No se pudo crear la cuenta. Verifica que Email/Password esté habilitado en Firebase e inténtalo nuevamente.';
+        alert(mensaje);
+    }
     return false;
 }
 
-function iniciarSesion(e) {
+async function iniciarSesion(e) {
     e.preventDefault();
     const correo = document.getElementById('login-correo').value.trim().toLowerCase();
     const clave = document.getElementById('login-clave').value;
 
-    // Administrador
-    if (correo === ADMIN_CORREO && clave === ADMIN_CLAVE) {
-        usuarioActual = { id: 'admin', nombre: 'Administrador', correo: ADMIN_CORREO, esAdmin: true };
-        localStorage.setItem('sesion', JSON.stringify(usuarioActual));
-        alert('✅ Bienvenido, Administrador');
+    try {
+        const { signInWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js");
+        const credencial = await signInWithEmailAndPassword(window.auth, correo, clave);
+        usuarioActual = crearUsuarioDeSesion(credencial.user);
+        alert(`✅ Bienvenido, ${usuarioActual.nombre}.`);
         actualizarMenu();
-        mostrarPantalla('admin-productos');
-        return false;
+        mostrarPantalla(usuarioActual.esAdmin ? 'admin-productos' : 'tienda');
+    } catch (error) {
+        console.error('No se pudo iniciar sesión:', error);
+        alert('Correo o contraseña incorrectos, o la cuenta no está habilitada en Firebase Authentication.');
     }
-
-    // Cliente registrado
-    const usuarios = obtenerUsuarios();
-    const usuario = usuarios.find(u => u.correo === correo && u.clave === clave);
-    if (!usuario) return alert('Correo o contraseña incorrectos');
-
-    usuarioActual = usuario;
-    localStorage.setItem('sesion', JSON.stringify(usuarioActual));
-    alert(`✅ Bienvenido, ${usuario.nombre}`);
-    actualizarMenu();
-    mostrarPantalla('tienda');
     return false;
 }
 
-function cerrarSesion() {
-    usuarioActual = null;
-    carrito = [];
-    datosEnvio = {};
-    comprobanteBase64 = '';
-    localStorage.removeItem('sesion');
-    actualizarMenu();
-    mostrarPantalla('inicio');
+async function cerrarSesion() {
+    try {
+        const { signOut } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js");
+        await signOut(window.auth);
+        usuarioActual = null;
+        carrito = [];
+        datosEnvio = {};
+        comprobanteBase64 = '';
+        actualizarMenu();
+        mostrarPantalla('inicio');
+    } catch (error) {
+        console.error('No se pudo cerrar la sesión:', error);
+        alert('No se pudo cerrar la sesión. Inténtalo nuevamente.');
+    }
 }
 
-function verificarSesion() {
-    // Primero leemos del localStorage inmediatamente
-    const sesionLocal = localStorage.getItem('sesion');
-    if (sesionLocal) {
-        usuarioActual = JSON.parse(sesionLocal);
-    } else {
-        usuarioActual = null;
-    }
-    // Mostramos el menú y la pantalla de inicio de una vez
-    actualizarMenu();
-    mostrarPantalla('inicio');
-    
-    // Después escuchamos Firebase sin esperar
-    import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js").then(({ onAuthStateChanged }) => {
-        onAuthStateChanged(window.auth, (usuario) => {
-            if (usuario) {
-                usuarioActual = {
-                    id: usuario.uid,
-                    correo: usuario.email,
-                    nombre: usuario.displayName || usuario.email,
-                    esAdmin: usuario.email === "admin@teammariel.com"
-                };
-            } else if (sesionLocal) {
-                usuarioActual = JSON.parse(sesionLocal);
-            } else {
-                usuarioActual = null;
-            }
-            actualizarMenu();
-        });
+async function verificarSesion() {
+    const { onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js");
+    onAuthStateChanged(window.auth, (firebaseUser) => {
+        usuarioActual = firebaseUser ? crearUsuarioDeSesion(firebaseUser) : null;
+        actualizarMenu();
+        escucharPedidos();
+        if (firebaseUser) {
+            mostrarPantalla(usuarioActual.esAdmin ? 'admin-productos' : 'tienda');
+        } else {
+            todosPedidos = [];
+            mostrarPantalla('inicio');
+        }
+    }, (error) => {
+        console.error('No se pudo verificar la sesión:', error);
+        alert('No se pudo comprobar la sesión de Firebase. Recarga la página e inténtalo nuevamente.');
     });
 }
-
-
 // ==============================================
 // GESTIÓN DE PRODUCTOS
 // ==============================================
 let listaProductos = [];
+let productosCarrusel = [];
+let indiceCarrusel = 0;
+let intervaloCarrusel = null;
+let carruselPausado = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function obtenerProductos() {
     return listaProductos;
+}
+
+function renderizarSlideCarrusel() {
+    if (!productosCarrusel.length) return;
+    const producto = productosCarrusel[indiceCarrusel];
+    const imagen = document.getElementById('carrusel-imagen');
+    const titulo = document.getElementById('carrusel-titulo');
+    if (!imagen || !titulo) return;
+    imagen.src = producto.imagen;
+    imagen.alt = `Producto destacado: ${producto.nombre || 'alimento'}`;
+    titulo.textContent = producto.nombre || 'Productos para tu familia';
+    imagen.hidden = false;
+    titulo.hidden = false;
+}
+
+function moverCarrusel(direccion) {
+    if (productosCarrusel.length < 2) return;
+    indiceCarrusel = (indiceCarrusel + direccion + productosCarrusel.length) % productosCarrusel.length;
+    renderizarSlideCarrusel();
+}
+
+function actualizarControlPausaCarrusel() {
+    const boton = document.getElementById('carrusel-pausa');
+    if (!boton) return;
+    boton.textContent = carruselPausado ? 'Reproducir' : 'Pausar';
+    boton.setAttribute('aria-label', carruselPausado ? 'Reproducir carrusel' : 'Pausar carrusel');
+}
+
+function alternarPausaCarrusel() {
+    carruselPausado = !carruselPausado;
+    if (intervaloCarrusel) {
+        clearInterval(intervaloCarrusel);
+        intervaloCarrusel = null;
+    }
+    if (!carruselPausado && productosCarrusel.length > 1) {
+        intervaloCarrusel = setInterval(() => moverCarrusel(1), 5000);
+    }
+    actualizarControlPausaCarrusel();
+}
+
+function actualizarCarruselProductos() {
+    const carrusel = document.getElementById('carrusel-productos');
+    if (!carrusel) return;
+    productosCarrusel = listaProductos.filter(producto => typeof producto.imagen === 'string' && producto.imagen.trim());
+    const imagen = document.getElementById('carrusel-imagen');
+    const titulo = document.getElementById('carrusel-titulo');
+    const controles = carrusel.querySelectorAll('.carrusel-control, .carrusel-pausa');
+    if (!productosCarrusel.length) {
+        if (imagen) imagen.hidden = true;
+        if (titulo) titulo.hidden = true;
+        controles.forEach(control => control.hidden = true);
+        if (intervaloCarrusel) clearInterval(intervaloCarrusel);
+        intervaloCarrusel = null;
+        return;
+    }
+
+    indiceCarrusel %= productosCarrusel.length;
+    renderizarSlideCarrusel();
+    controles.forEach(control => control.hidden = productosCarrusel.length < 2);
+    actualizarControlPausaCarrusel();
+    if (!carruselPausado && productosCarrusel.length > 1 && !intervaloCarrusel) {
+        intervaloCarrusel = setInterval(() => moverCarrusel(1), 5000);
+    }
 }
 
 // Escuchar productos en tiempo real desde Firebase
@@ -714,32 +812,51 @@ async function escucharProductos() {
             id: doc.id,
             ...doc.data()
         }));
+        actualizarCarruselProductos();
         
         if (document.getElementById('productos-publicos')) renderizarProductos('productos-publicos', true);
         if (document.getElementById('productos-tienda')) renderizarProductos('productos-tienda');
         if (document.getElementById('lista-admin-productos')) renderizarProductos('lista-admin-productos');
+    }, (error) => {
+        console.error('No se pudieron cargar los productos:', error);
+        ['productos-publicos', 'productos-tienda', 'lista-admin-productos'].forEach(id => {
+            const contenedor = document.getElementById(id);
+            if (contenedor) contenedor.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#b00020; padding:2rem;">No se pudieron cargar los productos. Verifica los permisos de lectura de Firebase.</p>';
+        });
     });
 }
 let todosPedidos = [];
+let detenerEscuchaPedidos = null;
 
 // Escuchar pedidos en tiempo real desde Firebase
 async function escucharPedidos() {
-    const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
-    
-    onSnapshot(collection(window.db, "pedidos"), (snapshot) => {
-        
-        todosPedidos = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
+    if (detenerEscuchaPedidos) {
+        detenerEscuchaPedidos();
+        detenerEscuchaPedidos = null;
+    }
+
+    todosPedidos = [];
+    if (!usuarioActual) return;
+
+    const { collection, onSnapshot, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+    const pedidosRef = collection(window.db, "pedidos");
+    const consulta = usuarioActual.esAdmin
+        ? pedidosRef
+        : query(pedidosRef, where("clienteId", "==", usuarioActual.id));
+
+    detenerEscuchaPedidos = onSnapshot(consulta, (snapshot) => {
+        todosPedidos = snapshot.docs.map(documento => ({
+            ...documento.data(),
+            firestoreId: documento.id
         }));
-        
-        // ✅ Si el snapshot está vacío, asegurar que quede array vacío
-        if (snapshot.empty) {
-            todosPedidos = [];
-        }
-        
         if (document.getElementById('lista-mis-pedidos')) renderizarMisPedidos();
         if (document.getElementById('lista-admin-pedidos')) renderizarPedidosAdmin();
+    }, (error) => {
+        console.error('No se pudieron cargar los pedidos:', error);
+        ['lista-mis-pedidos', 'lista-admin-pedidos'].forEach(id => {
+            const contenedor = document.getElementById(id);
+            if (contenedor) contenedor.innerHTML = '<p style="text-align:center; color:#b00020; padding:2rem;">No se pudieron cargar los pedidos. Verifica los permisos de lectura de Firebase.</p>';
+        });
     });
 }
 
@@ -764,7 +881,7 @@ function renderizarProductos(contenedorId, soloVer = false) {
             <div class="producto-info">
                 <h3>${producto.nombre}</h3>
                 <p style="font-size:0.9rem; color:#666; margin-bottom:0.5rem;">${producto.descripcion || ''}</p>
-                <p class="precio">$${parseFloat(producto.precio).toFixed(2)} UYU</p>
+                <p class="precio">${mostrarPrecioDual(parseFloat(producto.precio))}</p>
                 <!-- ✅ Stock visible -->
                 <p style="font-size:0.85rem; margin:0.3rem 0; color:${producto.stock > 0 ? '#28a745' : '#dc3545'};">
                     ${producto.stock > 0 ? `Disponibles: ${producto.stock}` : 'Agotado'}
@@ -954,11 +1071,13 @@ function renderizarCarrito() {
 
     if (carrito.length === 0) {
         contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">Tu carrito está vacío. Ve a la tienda y agrega productos.</p>';
-        totalElement.textContent = '0.00';
+        totalElement.textContent = formatearMontoVista(0);
+        const totalUSD = document.getElementById('total-carrito-usd');
+        if (totalUSD) totalUSD.textContent = mostrarMonedaSecundaria(0);
         // Resetea todo si no hay productos
-        if (subtotalElement) subtotalElement.textContent = '0.00';
-        if (envioElement) envioElement.textContent = '0.00';
-        if (totalPagoElement) totalPagoElement = '0.00';
+        if (subtotalElement) subtotalElement.textContent = formatearMontoVista(0);
+        if (envioElement) envioElement.textContent = formatearMontoVista(0);
+        if (totalPagoElement) totalPagoElement.textContent = formatearMontoVista(0);
         return;
     }
 
@@ -971,14 +1090,14 @@ function renderizarCarrito() {
         const fila = document.createElement('div');
         fila.style = 'display:flex; justify-content:space-between; align-items:center; padding:0.8rem; border-bottom:1px solid #eee; flex-wrap:wrap; gap:0.5rem;';
         fila.innerHTML = `
-            <div><strong>${item.nombre}</strong><br>$${item.precio.toFixed(2)} c/u</div>
+            <div><strong>${item.nombre}</strong><br>${mostrarPrecioDual(item.precio)} c/u</div>
             <div style="display:flex; align-items:center; gap:0.5rem;">
                 <button onclick="cambiarCantidadCarrito(${indice}, -1)" style="width:30px; height:30px; border:none; background:#ddd; border-radius:4px; cursor:pointer;">−</button>
                 <span>${item.cantidad}</span>
                 <button onclick="cambiarCantidadCarrito(${indice}, 1)" style="width:30px; height:30px; border:none; background:#ddd; border-radius:4px; cursor:pointer;">+</button>
                 <button onclick="quitarDelCarrito(${indice})" style="border:none; background:transparent; color:#d00; cursor:pointer; font-size:1.2rem; margin-left:0.5rem;">🗑️</button>
             </div>
-            <div style="font-weight:bold;">$${subtotal.toFixed(2)}</div>
+            <div style="font-weight:bold;">${mostrarPrecioDual(subtotal)}</div>
         `;
         contenedor.appendChild(fila);
     });
@@ -995,10 +1114,12 @@ function renderizarCarrito() {
     const totalFinal = subtotalProductos + costoEnvio;
 
     // 4. Actualiza TODOS los números en pantalla
-    totalElement.textContent = subtotalProductos.toFixed(2); // subtotal solo productos
-    if (subtotalElement) subtotalElement.textContent = subtotalProductos.toFixed(2);
-    if (envioElement) envioElement.textContent = costoEnvio.toFixed(2);
-    if (totalPagoElement) totalPagoElement.textContent = totalFinal.toFixed(2);
+    totalElement.textContent = formatearMontoVista(subtotalProductos);
+    const totalUSD = document.getElementById('total-carrito-usd');
+    if (totalUSD) totalUSD.textContent = mostrarMonedaSecundaria(subtotalProductos);
+    if (subtotalElement) subtotalElement.textContent = formatearMontoVista(subtotalProductos);
+    if (envioElement) envioElement.textContent = formatearMontoVista(costoEnvio);
+    if (totalPagoElement) totalPagoElement.textContent = formatearMontoVista(totalFinal);
 }
 
 
@@ -1038,11 +1159,19 @@ function actualizarTotalConEnvio() {
     const mostrarEnvio = document.getElementById('mostrar-envio');
     const totalFinal = document.getElementById('total-final');
 
-    if (muestraPrecio) muestraPrecio.textContent = PRECIO_ENVIO_DOMICILIO.toFixed(2);
-    if (subtotalElem) subtotalElem.textContent = subtotal.toFixed(2);
+    if (muestraPrecio) muestraPrecio.textContent = formatearMontoVista(PRECIO_ENVIO_DOMICILIO);
+    const muestraPrecioUSD = document.getElementById('precio-envio-muestra-usd');
+    if (muestraPrecioUSD) muestraPrecioUSD.textContent = mostrarMonedaSecundaria(PRECIO_ENVIO_DOMICILIO);
+    if (subtotalElem) subtotalElem.textContent = formatearMontoVista(subtotal);
+    const subtotalUSDLabel = document.getElementById('subtotal-productos-usd');
+    if (subtotalUSDLabel) subtotalUSDLabel.textContent = mostrarMonedaSecundaria(subtotal);
     if (lineaEnvio) lineaEnvio.style.display = esDomicilio ? 'block' : 'none';
-    if (mostrarEnvio) mostrarEnvio.textContent = montoEnvio.toFixed(2);
-    if (totalFinal) totalFinal.textContent = total.toFixed(2);
+    if (mostrarEnvio) mostrarEnvio.textContent = formatearMontoVista(montoEnvio);
+    const mostrarEnvioUSD = document.getElementById('mostrar-envio-usd');
+    if (mostrarEnvioUSD) mostrarEnvioUSD.textContent = mostrarMonedaSecundaria(montoEnvio);
+    if (totalFinal) totalFinal.textContent = formatearMontoVista(total);
+    const totalUSDLabel = document.getElementById('total-final-usd');
+    if (totalUSDLabel) totalUSDLabel.textContent = mostrarMonedaSecundaria(total);
   localStorage.setItem('ultimoTotal', total.toString());
 }
 
@@ -1062,9 +1191,6 @@ function guardarDatosEnvio(e) {
     const costoEnvio = opcionEntrega.value === 'domicilio' ? PRECIO_ENVIO_DOMICILIO : 0;
     const totalFinal = subtotal + costoEnvio;
 
-    // ✅ Guardar para que la pantalla de pago lo vea
-    localStorage.setItem('totalPagoCompleto', totalFinal.toString());
-
     datosEnvio = {
         direccion: document.getElementById('envio-direccion').value.trim(),
         telefono: document.getElementById('envio-telefono').value.trim(),
@@ -1077,17 +1203,65 @@ function guardarDatosEnvio(e) {
         return alert('Completa todos los datos');
     }
 
+    localStorage.setItem('totalPagoCompleto', totalFinal.toString());
     mostrarPantalla('pago');
     return false;
 }
-// Cuando se muestra la pantalla de pago, pone el total correcto
-function mostrarTotalEnPago() {
-    const totalGuardado = localStorage.getItem('totalPagoCompleto');
-    const elementoTotal = document.getElementById('total-pago');
-    
-    if (totalGuardado && elementoTotal) {
-        elementoTotal.textContent = parseFloat(totalGuardado).toFixed(2);
+
+function actualizarResumenPago() {
+    const radioUSD = document.getElementById('opcion-pago-usd');
+    const datosTransferencia = document.getElementById('datos-transferencia');
+    const importePago = document.getElementById('total-pago');
+    const equivalentePago = document.getElementById('equivalente-pago');
+    const avisoCotizacion = document.getElementById('aviso-cotizacion');
+    const tituloInstrucciones = document.getElementById('titulo-instrucciones-pago');
+    if (!radioUSD || !datosTransferencia || !importePago) return;
+
+    const tasaPago = radioUSD.checked && cotizacionPago !== null
+        ? cotizacionPago
+        : configTienda.tasaUYUPorUSD;
+    const usdDisponible = tasaPago > 0;
+    radioUSD.disabled = !usdDisponible;
+    if (!usdDisponible && radioUSD.checked) {
+        document.querySelector('input[name="moneda-pago"][value="UYU"]').checked = true;
     }
+
+    const subtotal = carrito.reduce((suma, item) => suma + item.precio * item.cantidad, 0);
+    const totalUYU = subtotal + (Number(datosEnvio.costoEnvio) || 0);
+    const pagarEnUSD = radioUSD.checked && usdDisponible;
+    const totalUSD = convertirUYUaUSD(totalUYU, tasaPago);
+    const instrucciones = pagarEnUSD
+        ? 'Solicita por privado los datos de Zelle antes de transferir. Después de realizar el pago, sube aquí la captura del comprobante.'
+        : configTienda.transferenciaUYU;
+
+    if (tituloInstrucciones) {
+        tituloInstrucciones.textContent = pagarEnUSD ? '💵 Datos para pagar por Zelle' : '🏦 Datos para transferir en UYU';
+    }
+    datosTransferencia.textContent = instrucciones || 'Los datos de transferencia para esta moneda aún no están configurados. Contacta a la tienda.';
+    importePago.textContent = pagarEnUSD && totalUSD !== null
+        ? formatearMontoUSD(totalUSD)
+        : formatearMontoUYU(totalUYU);
+    if (equivalentePago) {
+        equivalentePago.textContent = pagarEnUSD
+            ? `Total base del pedido: ${formatearMontoUYU(totalUYU)}`
+            : totalUSD === null ? '' : `También puedes pagar en USD: ${formatearMontoUSD(totalUSD)}`;
+    }
+    if (avisoCotizacion) {
+        avisoCotizacion.textContent = errorConfiguracionTienda
+            ? 'No se pudo leer la configuración de moneda en Firebase. Revisa los permisos de lectura de configuracion/tienda.'
+            : configTienda.tasaUYUPorUSD > 0
+                ? `Cotización aplicada: 1 USD = ${formatearMontoUYU(tasaPago)}. Solicita los datos de Zelle por privado; el importe se redondea a centavos.`
+                : 'El pago en USD estará disponible cuando la tienda configure la cotización.';
+    }
+}
+
+function seleccionarMonedaPago() {
+    const monedaPago = document.querySelector('input[name="moneda-pago"]:checked')?.value;
+    cambiarMonedaVista(monedaPago);
+}
+
+function mostrarTotalEnPago() {
+    actualizarResumenPago();
 }
 
 // Llama a esta función cuando se abre la pantalla de pago
@@ -1096,8 +1270,61 @@ function mostrarTotalEnPago() {
 //     ... tu código ...
 //     if (nombre === 'pago') mostrarTotalEnPago();
 // }
+const MAX_COMPROBANTE_DATA_URL_LENGTH = 700 * 1024;
+
+function leerComoDataURL(archivo) {
+    return new Promise((resolve, reject) => {
+        const lector = new FileReader();
+        lector.onload = () => {
+            if (typeof lector.result === 'string') resolve(lector.result);
+            else reject(new Error('No se pudo leer la imagen seleccionada.'));
+        };
+        lector.onerror = () => reject(lector.error || new Error('No se pudo leer la imagen seleccionada.'));
+        lector.readAsDataURL(archivo);
+    });
+}
+
+async function prepararComprobante(archivo) {
+    if (archivo.size <= 500 * 1024) {
+        const dataURL = await leerComoDataURL(archivo);
+        if (dataURL.length <= MAX_COMPROBANTE_DATA_URL_LENGTH) return dataURL;
+    }
+
+    const imagen = await createImageBitmap(archivo);
+    try {
+        const escala = Math.min(1, 1280 / Math.max(imagen.width, imagen.height));
+        let ancho = Math.max(1, Math.round(imagen.width * escala));
+        let alto = Math.max(1, Math.round(imagen.height * escala));
+        const canvas = document.createElement('canvas');
+        const contexto = canvas.getContext('2d');
+        if (!contexto) throw new Error('No se pudo preparar la imagen del comprobante.');
+
+        for (let intento = 0; intento < 5; intento++) {
+            canvas.width = ancho;
+            canvas.height = alto;
+            contexto.fillStyle = '#fff';
+            contexto.fillRect(0, 0, ancho, alto);
+            contexto.drawImage(imagen, 0, 0, ancho, alto);
+
+            for (const calidad of [0.82, 0.7, 0.58, 0.46, 0.34]) {
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', calidad));
+                if (!blob) throw new Error('No se pudo comprimir la imagen del comprobante.');
+                const dataURL = await leerComoDataURL(blob);
+                if (dataURL.length <= MAX_COMPROBANTE_DATA_URL_LENGTH) return dataURL;
+            }
+
+            ancho = Math.max(1, Math.floor(ancho * 0.75));
+            alto = Math.max(1, Math.floor(alto * 0.75));
+        }
+
+        throw new Error('La imagen sigue siendo demasiado grande. Prueba con una captura de pantalla del comprobante.');
+    } finally {
+        imagen.close();
+    }
+}
+
 // Subir comprobante de pago
-document.addEventListener('change', function(e) {
+document.addEventListener('change', async function(e) {
     if (e.target && e.target.id === 'comprobante-pago') {
         const archivo = e.target.files[0];
         
@@ -1117,31 +1344,48 @@ document.addEventListener('change', function(e) {
             return;
         }
 
-        const lector = new FileReader();
-        lector.onload = function(e) {
-            comprobanteBase64 = e.target.result;
-            const vista = document.getElementById('vista-comprobante');
+        const vista = document.getElementById('vista-comprobante');
+        if (vista) vista.textContent = 'Preparando comprobante...';
+
+        try {
+            const dataURL = await prepararComprobante(archivo);
+            if (e.target.files[0] !== archivo) return;
+            comprobanteBase64 = dataURL;
             if (vista) {
                 vista.innerHTML = `
-                    <p style="color:green; font-weight:bold;">✅ Comprobante cargado:</p>
-                    <img src="${comprobanteBase64}" style="max-width:200px; border-radius:6px; margin-top:0.5rem; display:block;">
+                    <p style="color:green; font-weight:bold;">✅ Comprobante listo para enviar:</p>
+                    <img src="${dataURL}" style="max-width:200px; border-radius:6px; margin-top:0.5rem; display:block;">
                 `;
             }
-        };
-        lector.readAsDataURL(archivo);
+        } catch (error) {
+            console.error('No se pudo preparar el comprobante:', error);
+            alert(error.message || 'No se pudo preparar la imagen. Prueba con otra imagen.');
+            e.target.value = '';
+            comprobanteBase64 = '';
+            if (vista) vista.innerHTML = '';
+        }
     }
 });
 
 async function confirmarPago(e) {
     e.preventDefault();
+    if (!window.auth.currentUser || !usuarioActual) return alert('Inicia sesión con tu cuenta antes de confirmar el pedido.');
     if (carrito.length === 0) return alert('El carrito está vacío');
     if (!comprobanteBase64) return alert('Sube el comprobante de pago');
+
+    const monedaPago = document.querySelector('input[name="moneda-pago"]:checked')?.value || 'UYU';
+    const cotizacionAplicada = monedaPago === 'USD' ? cotizacionPago : configTienda.tasaUYUPorUSD;
+    if (monedaPago === 'USD' && !(cotizacionAplicada > 0)) {
+        return alert('El pago en USD no está disponible porque falta la cotización.');
+    }
 
     const subtotalProductos = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
     const costoEnvio = datosEnvio.costoEnvio || 0;
     const total = subtotalProductos + costoEnvio;
+    const totalUSD = convertirUYUaUSD(total, cotizacionAplicada);
 
     const pedido = {
+        id: 'ped_' + Date.now(),
         fecha: new Date().toISOString(),
         clienteId: usuarioActual.id,
         clienteNombre: usuarioActual.nombre,
@@ -1151,17 +1395,31 @@ async function confirmarPago(e) {
         subtotal: subtotalProductos,
         costoEnvio: costoEnvio,
         total: total,
+        totalUYU: total,
+        monedaPago,
+        cotizacionUYUPorUSD: cotizacionAplicada || null,
+        totalUSD: totalUSD,
+        totalPago: monedaPago === 'USD' ? totalUSD : total,
         comprobante: comprobanteBase64,
         estado: 'pendiente_validacion'
     };
 
-    // ✅ Guardar el pedido en Firebase — DEJA que Firebase genere el ID
-    const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
-    await addDoc(collection(window.db, "pedidos"), pedido);
+    try {
+        const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+        await addDoc(collection(window.db, "pedidos"), pedido);
+    } catch (error) {
+        console.error('No se pudo registrar el pedido:', error);
+        const mensaje = error.message && error.message.includes('longer than')
+            ? 'La imagen del comprobante todavía supera el límite. Prueba con una captura de pantalla más pequeña.'
+            : 'No se pudo registrar el pedido. Conserva el comprobante e inténtalo nuevamente.';
+        alert(mensaje);
+        return false;
+    }
 
     // Reiniciar todo
     carrito = [];
     datosEnvio = {};
+    cotizacionPago = null;
     comprobanteBase64 = '';
     document.getElementById('comprobante-pago').value = '';
     const vista = document.getElementById('vista-comprobante');
@@ -1174,6 +1432,7 @@ async function confirmarPago(e) {
     mostrarPantalla('mis-pedidos');
     return false;
 }
+
 
 // ==============================================
 // ESTADOS DE PEDIDOS — Textos y colores
@@ -1196,8 +1455,8 @@ function renderizarMisPedidos() {
     const contenedor = document.getElementById('lista-mis-pedidos');
     if (!contenedor || !usuarioActual) return;
 
-    const misPedidos = (todosPedidos || []).filter(p => p.clienteId === usuarioActual.id);
-
+    const misPedidos = todosPedidos.filter(p => p.clienteId === usuarioActual.id);
+    
     if (misPedidos.length === 0) {
         contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#666;">No tienes pedidos todavía.</p>';
         return;
@@ -1223,8 +1482,8 @@ function renderizarMisPedidos() {
             <p style="font-size:0.95rem; margin-bottom:0.8rem;"><strong>Documento:</strong> ${pedido.datosEnvio?.carnet || '—'}</p>
             <div style="border-top:1px solid #eee; padding-top:0.8rem; margin-top:0.5rem;">
                 <p style="font-weight:600; margin-bottom:0.5rem;">Productos:</p>
-                ${pedido.productos.map(i => `<p style="font-size:0.9rem;">• ${i.cantidad}x ${i.nombre} — $${(i.precio * i.cantidad).toFixed(2)}</p>`).join('')}
-                <p style="font-size:1.1rem; font-weight:700; color:#d4af37; margin-top:0.5rem;">Total: $${pedido.total.toFixed(2)} UYU</p>
+                ${pedido.productos.map(i => `<p style="font-size:0.9rem;">• ${i.cantidad}x ${i.nombre} — ${formatearProductoPedido(i, pedido)}</p>`).join('')}
+                <p style="font-size:1.1rem; font-weight:700; color:#d4af37; margin-top:0.5rem;">Total: ${formatearTotalPedido(pedido)}</p>
             </div>
             ${pedido.comprobante ? `<div style="margin-top:0.8rem;"><p style="font-size:0.9rem; font-weight:500;">Comprobante de pago:</p><img src="${pedido.comprobante}" style="max-width:150px; border-radius:6px; margin-top:0.3rem;"></div>` : ''}
         `;
@@ -1236,12 +1495,11 @@ function renderizarMisPedidos() {
 // ==============================================
 // ADMINISTRADOR — GESTIÓN DE PEDIDOS
 // ==============================================
-  
 function renderizarPedidosAdmin() {
     const contenedor = document.getElementById('lista-admin-pedidos');
     if (!contenedor || !usuarioActual?.esAdmin) return;
 
-    let pedidos = todosPedidos || [];
+    let pedidos = todosPedidos;
     if (filtroPedidosAdmin !== 'todos') {
         pedidos = pedidos.filter(p => p.estado === filtroPedidosAdmin);
     }
@@ -1279,8 +1537,8 @@ function renderizarPedidosAdmin() {
             </div>
             <div style="border-top:1px solid #eee; padding-top:0.8rem; margin-top:0.5rem;">
                 <p style="font-weight:600; margin-bottom:0.5rem;">Productos:</p>
-                ${pedido.productos.map(i => `<p style="font-size:0.9rem;">• ${i.cantidad}x ${i.nombre} — $${(i.precio * i.cantidad).toFixed(2)}</p>`).join('')}
-                <p style="font-size:1.1rem; font-weight:700; color:#d4af37; margin-top:0.5rem;">Total: $${pedido.total.toFixed(2)} UYU</p>
+                ${pedido.productos.map(i => `<p style="font-size:0.9rem;">• ${i.cantidad}x ${i.nombre} — ${formatearProductoPedido(i, pedido)}</p>`).join('')}
+                <p style="font-size:1.1rem; font-weight:700; color:#d4af37; margin-top:0.5rem;">Total: ${formatearTotalPedido(pedido)}</p>
             </div>
             ${pedido.comprobante ? `<div style="margin-top:0.8rem;"><p style="font-size:0.9rem; font-weight:500;">Comprobante de pago:</p><img src="${pedido.comprobante}" style="max-width:180px; border-radius:6px; margin-top:0.3rem;"></div>` : ''}
             ${pedido.estado !== 'entregado' && pedido.estado !== 'rechazado' ? `
@@ -1298,21 +1556,20 @@ function renderizarPedidosAdmin() {
         contenedor.appendChild(tarjeta);
     });
 }
-
 async function cambiarEstadoPedido(idPedido, nuevoEstado) {
-    const pedido = todosPedidos.find(p => p.id === idPedido);
-    if (!pedido) {
-        return alert('Pedido no encontrado');
-    }
+    if (!usuarioActual?.esAdmin) return alert('Solo el administrador puede cambiar estados.');
+    const indice = todosPedidos.findIndex(p => p.id === idPedido);
+    if (indice === -1) return alert('Pedido no encontrado');
 
     const estadoTexto = obtenerInfoEstado(nuevoEstado).texto;
     if (!confirm(`¿Cambiar estado a: ${estadoTexto}?`)) return;
 
-    const { doc, updateDoc, getDocs, collection, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
-    
     try {
-        if (nuevoEstado === 'pago_validado' && pedido.estado !== 'pago_validado') {
-            for (const item of pedido.productos || []) {
+        const { doc, updateDoc, getDocs, collection, query, where } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
+
+        if (nuevoEstado === 'pago_validado' && todosPedidos[indice].estado !== 'pago_validado') {
+            const pedido = todosPedidos[indice];
+            for (const item of pedido.productos) {
                 const productosRef = collection(window.db, "productos");
                 const q = query(productosRef, where("nombre", "==", item.nombre));
                 const snapshot = await getDocs(q);
@@ -1326,21 +1583,14 @@ async function cambiarEstadoPedido(idPedido, nuevoEstado) {
             }
         }
 
-        await updateDoc(doc(window.db, "pedidos", idPedido), { estado: nuevoEstado });
-
-        // Actualizar en la lista local
-        const indice = todosPedidos.findIndex(p => p.id === idPedido);
-        if (indice !== -1) {
-            todosPedidos[indice].estado = nuevoEstado;
-        }
-
+        await updateDoc(doc(window.db, "pedidos", todosPedidos[indice].firestoreId), { estado: nuevoEstado });
         alert('✅ Estado actualizado');
-        renderizarPedidosAdmin();
-        
     } catch (error) {
-        alert('❌ Error: ' + error.message);
+        console.error('No se pudo actualizar el estado del pedido:', error);
+        alert('No se pudo actualizar el pedido. Verifica los permisos de administrador e inténtalo nuevamente.');
     }
 }
+
 
 function filtrarPedidosAdmin(estado) {
     filtroPedidosAdmin = estado;
@@ -1374,6 +1624,20 @@ function actualizarMenu() {
             <button onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
         `;
     }
+    menu.insertAdjacentHTML('beforeend', `
+        <label for="moneda-vista" style="display:flex; align-items:center; gap:0.4rem; margin:0; color:white;">Moneda
+            <select id="moneda-vista" aria-label="Moneda para mostrar precios" onchange="cambiarMonedaVista(this.value)" style="width:auto; padding:0.45rem; border-radius:6px;">
+                <option value="UYU">UYU</option>
+                <option value="USD" ${configTienda.tasaUYUPorUSD > 0 ? '' : 'disabled'}>USD</option>
+            </select>
+        </label>
+    `);
+    const selectorMoneda = document.getElementById('moneda-vista');
+    if (monedaVista === 'USD' && selectorMoneda.options[1].disabled) {
+        monedaVista = 'UYU';
+        localStorage.setItem('monedaVista', monedaVista);
+    }
+    selectorMoneda.value = monedaVista;
 }
 
 function ocultarTodasPantallas() {
@@ -1403,12 +1667,12 @@ function mostrarPantalla(nombre) {
             renderizarCarrito();
             break;
         case 'pago':
-            // ✅ Al entrar a pago, calcula y muestra el total con envío
-            const subtotal = carrito.reduce((s, item) => s + (item.precio * item.cantidad), 0);
-            const costoEnvio = datosEnvio?.costoEnvio || 0;
-            const total = subtotal + costoEnvio;
-            const elementoTotal = document.getElementById('total-pago');
-            if (elementoTotal) elementoTotal.textContent = total.toFixed(2);
+            const opcionMonedaVista = document.querySelector(`input[name="moneda-pago"][value="${monedaVista}"]`);
+            if (opcionMonedaVista && !opcionMonedaVista.disabled) opcionMonedaVista.checked = true;
+            cotizacionPago = document.querySelector('input[name="moneda-pago"]:checked')?.value === 'USD'
+                ? configTienda.tasaUYUPorUSD
+                : null;
+            actualizarResumenPago();
             break;
         case 'mis-pedidos':
             if (!usuarioActual) return mostrarPantalla('login');
@@ -1416,6 +1680,7 @@ function mostrarPantalla(nombre) {
             break;
         case 'admin-productos':
             if (!usuarioActual?.esAdmin) return mostrarPantalla('inicio');
+            cargarConfiguracionEnFormulario();
             renderizarProductos('lista-admin-productos');
             break;
         case 'admin-pedidos':
@@ -1426,55 +1691,16 @@ function mostrarPantalla(nombre) {
     }
 }
 
-// ==============================================
-// LIMPIAR PEDIDOS ENTREGADOS DE HACE MÁS DE 10 DÍAS
-// ==============================================
-async function limpiarPedidosViejos() {
-    if (!confirm('⚠️ ¿Eliminar los pedidos entregados de hace más de 10 días?\n\nNo se puede deshacer.')) {
-        return;
-    }
-
-    try {
-        const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js");
-        
-        const hoy = new Date();
-        const hace10Dias = new Date(hoy.getTime() - 10 * 24 * 60 * 60 * 1000);
-        let contador = 0;
-
-        // ✅ Usamos la lista que ya está cargada, NO volvemos a leer Firebase
-        for (const pedido of todosPedidos) {
-            if (pedido.fecha && pedido.estado === 'entregado') {
-                const fechaPedido = new Date(pedido.fecha);
-                if (fechaPedido < hace10Dias && pedido.id) {
-                    await deleteDoc(doc(window.db, "pedidos", pedido.id));
-                    contador++;
-                }
-            }
-        }
-
-        alert(contador === 0 
-            ? '✅ No hay pedidos antiguos para eliminar.' 
-            : `✅ Se eliminaron ${contador} pedidos correctamente.`);
-
-        mostrarPantalla('admin-pedidos');
-        
-    } catch (error) {
-        console.error('Error:', error);
-        alert('❌ ' + error.message);
-    }
-}
-
 
 // ==============================================
 // INICIO DE LA APLICACIÓN
 // ==============================================
-// Limpiar datos antiguos
-localStorage.removeItem('pedidos');
-
-escucharProductos();  // ← agrega esta línea
-escucharPedidos();  // ← agrega esta línea 
-verificarSesion();
-
+window.addEventListener('load', () => {
+    escucharProductos();
+    escucharConfiguracionTienda();
+    verificarSesion();
+    mostrarPantalla('inicio');
+});
 </script>
 
 </body>
